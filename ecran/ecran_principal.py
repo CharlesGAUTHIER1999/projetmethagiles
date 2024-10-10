@@ -79,16 +79,16 @@ class EcranPrincipal(Ecran):
         sound.play()
         pygame.time.delay(int(duration * 1000)) # tenir la note la durée voulue
 
-    def play_sequence(self, filename):
+    def play_sequence(self, filename, tempo):
         if self.is_playing:
             return  # Si la musique est déjà en cours, on ne relance pas une nouvelle lecture
 
         # Lancer la lecture dans un thread séparé pour éviter le blocage de l'interface
         self.is_playing = True
         self.stop_requested = False  # Réinitialise la demande d'arrêt
-        threading.Thread(target=self._play_sequence_thread, args=(filename,)).start()
+        threading.Thread(target=self._play_sequence_thread, args=(filename,tempo)).start()
 
-    def _play_sequence_thread(self, filename):
+    def _play_sequence_thread(self, filename, tempo):
         try:
             notes_sequence = []
             duration_sequence = []
@@ -108,12 +108,12 @@ class EcranPrincipal(Ecran):
                     continue
 
                 if note == "0":  # Silence
-                    pygame.time.delay(int(duration * 1000))
+                    pygame.time.delay(int(duration * 1000 * tempo))
                     continue
 
                 frequency = note_to_frequency.get(note, None)
                 if frequency:
-                    self.play(frequency, duration)
+                    self.play(frequency, duration * tempo)
 
         finally:
             self.is_playing = False  # Réinitialise l'état de lecture une fois terminé
@@ -175,7 +175,7 @@ class EcranPrincipal(Ecran):
                                                   label="Lecture Séquence Aléatoire")
         self.bouton2.pack(padx=5, pady=5, side="left")
 
-        self.bouton3 = self.graphique.creer_button(frame=frame_high, fonction=lambda: self.play_sequence("pirate.txt"), label="RUN MUSIC")
+        self.bouton3 = self.graphique.creer_button(frame=frame_high, fonction=lambda: self.play_sequence("pirate.txt", 1), label="RUN MUSIC")
         self.bouton3.pack(padx=5, pady=5, side="left")
         self.bouton4 = self.graphique.creer_button(frame=frame_high, fonction=lambda: self.stop_music(), label="STOP MUSIC")
         self.bouton4.pack(padx=5, pady=5, side="left")       
@@ -222,8 +222,8 @@ class EcranPrincipal(Ecran):
 
     def read_random_sequence(self):
         # Générer une séquence aléatoire de 10 notes
-        mp.generate_random_sequence(self,25, "test.txt")
-        self.play_sequence("test.txt")
+        mp.generate_random_sequence(self,25, "test.txt", 1)
+        self.play_sequence("test.txt", 1)
         
 
     def load_music_file(self, file_path):
@@ -235,7 +235,7 @@ class EcranPrincipal(Ecran):
             self.message_label.config(text=f"Fichier {file_path} importé avec succès")
 
             # Jouer la séquence de musique après l'importation
-            self.play_sequence(file_path)
+            self.play_sequence(file_path, 1)
 
         except Exception as e:
             self.message_label.config(text=f"Erreur lors de l'importation du fichier : {e}")
