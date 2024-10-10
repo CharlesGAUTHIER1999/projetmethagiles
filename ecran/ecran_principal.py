@@ -115,7 +115,13 @@ class EcranPrincipal(Ecran):
 
     def play(self, frequency, duration):
         t = np.linspace(0, duration, int(self.sample_rate * duration), False)
-        tone = np.sin(frequency * 2 * np.pi * t)
+                # Synthèse additive avec plusieurs harmoniques pour imiter le son d'un piano
+        tone = (0.7 * np.sin(frequency * 2 * np.pi * t) +               # Fondamentale
+            0.2 * np.sin(2 * frequency * 2 * np.pi * t) +           # 1ère harmonique
+            0.1 * np.sin(3 * frequency * 2 * np.pi * t) +           # 2ème harmonique
+            0.05 * np.sin(4 * frequency * 2 * np.pi * t) +          # 3ème harmonique
+            0.03 * np.sin(5 * frequency * 2 * np.pi * t))           # 4ème harmonique
+
         stereo_tone = np.vstack((tone, tone)).T
         contiguous_tone = np.ascontiguousarray((32767 * stereo_tone).astype(np.int16))
         sound = pygame.sndarray.make_sound(contiguous_tone)
