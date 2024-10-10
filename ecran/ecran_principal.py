@@ -3,6 +3,9 @@ from ecran.ecran import Ecran
 from element.clavier import Clavier
 from ecran.getsionnaire_etat_ecran import GestionnaireEtatEcran
 import threading
+from tkinter import filedialog
+import tkinter as tk
+
 
 from note_frequence_base import note_to_frequency
 
@@ -115,7 +118,13 @@ class EcranPrincipal(Ecran):
 
     def play(self, frequency, duration):
         t = np.linspace(0, duration, int(self.sample_rate * duration), False)
-        tone = np.sin(frequency * 2 * np.pi * t)
+                # Synthèse additive avec plusieurs harmoniques pour imiter le son d'un piano
+        tone = (0.7 * np.sin(frequency * 2 * np.pi * t) +               # Fondamentale
+            0.2 * np.sin(2 * frequency * 2 * np.pi * t) +           # 1ère harmonique
+            0.1 * np.sin(3 * frequency * 2 * np.pi * t) +           # 2ème harmonique
+            0.05 * np.sin(4 * frequency * 2 * np.pi * t) +          # 3ème harmonique
+            0.03 * np.sin(5 * frequency * 2 * np.pi * t))           # 4ème harmonique
+
         stereo_tone = np.vstack((tone, tone)).T
         contiguous_tone = np.ascontiguousarray((32767 * stereo_tone).astype(np.int16))
         sound = pygame.sndarray.make_sound(contiguous_tone)
@@ -153,36 +162,35 @@ class EcranPrincipal(Ecran):
         self.canvas.pack(fill="both", expand=True)
         
         frame_high = self.graphique.creer_frame(self.root_frame, bg='#cecece')
-        self.bouton = self.graphique.creer_button(frame=frame_high, fonction=self.on_key_press,
+        self.message_label = tk.Label(self.root_frame, text="", fg="red")
+        self.message_label.pack(padx=10, pady=10)
+
+        self.bouton = self.graphique.creer_button(frame=frame_high, fonction=self.import_file,
                                                   label="Importation d'un fichier")
         self.bouton.pack(padx=5, pady=5, side="left")
 
-        self.bouton3 = self.graphique.creer_button(frame= frame_high, fonction= self.play_sequence("pirate.txt"), label="RUN MUSIC")
+        self.bouton3 = self.graphique.creer_button(frame=frame_high, fonction=lambda: self.play_sequence("pirate.txt"), label="RUN MUSIC")
         self.bouton3.pack(padx=5, pady=5, side="left")
-        self.bouton4 = self.graphique.creer_button(frame= frame_high, fonction=lambda: self.stop_music(), label="STOP MUSIC")
+        self.bouton4 = self.graphique.creer_button(frame=frame_high, fonction=lambda: self.stop_music(), label="STOP MUSIC")
         self.bouton4.pack(padx=5, pady=5, side="left")       
-        frame_high.pack(fill="both",expand=True)
-        
-        self.btn_stop = self.graphique.creer_button(frame=frame_high, 
-                                                    label="Stop")
-        self.btn_stop.pack(padx=5, pady=5, side="left")
+        frame_high.pack(fill="both", expand=True)
 
         frame_aside = self.graphique.creer_frame(self.root_frame, bg="#FF0000")
-        self.bouton1 = self.graphique.creer_button(frame= frame_aside, fonction= self.on_key_press, label="I1")
+        self.bouton1 = self.graphique.creer_button(frame=frame_aside, fonction= self.on_key_press, label="I1")
         self.bouton1.pack(padx=5, pady=5, side="left")
-        self.bouton2 = self.graphique.creer_button(frame= frame_aside, fonction= self.on_key_press, label="I2")
+        self.bouton2 = self.graphique.creer_button(frame=frame_aside, fonction= self.on_key_press, label="I2")
         self.bouton2.pack(padx=5, pady=5, side="left") 
-        self.bouton3 = self.graphique.creer_button(frame= frame_aside, fonction= self.on_key_press, label="I3")
+        self.bouton3 = self.graphique.creer_button(frame=frame_aside, fonction= self.on_key_press, label="I3")
         self.bouton3.pack(padx=5, pady=5, side="left")
-        self.bouton4 = self.graphique.creer_button(frame= frame_aside, fonction= self.on_key_press, label="I4")
+        self.bouton4 = self.graphique.creer_button(frame=frame_aside, fonction= self.on_key_press, label="I4")
         self.bouton4.pack(padx=5, pady=5, side="left")
-        self.bouton5 = self.graphique.creer_button(frame= frame_aside, fonction= self.on_key_press, label="I5")
+        self.bouton5 = self.graphique.creer_button(frame=frame_aside, fonction= self.on_key_press, label="I5")
         self.bouton5.pack(padx=5, pady=5, side="left")
-        self.bouton6 = self.graphique.creer_button(frame= frame_aside, fonction= self.on_key_press, label="I6")
+        self.bouton6 = self.graphique.creer_button(frame=frame_aside, fonction= self.on_key_press, label="I6")
         self.bouton6.pack(padx=5, pady=5, side="left")
-        self.bouton7 = self.graphique.creer_button(frame= frame_aside, fonction= self.on_key_press, label="I7")
+        self.bouton7 = self.graphique.creer_button(frame=frame_aside, fonction= self.on_key_press, label="I7")
         self.bouton7.pack(padx=5, pady=5, side="left")
-        self.bouton8 = self.graphique.creer_button(frame= frame_aside, fonction= self.on_key_press, label="I8")
+        self.bouton8 = self.graphique.creer_button(frame=frame_aside, fonction= self.on_key_press, label="I8")
         self.bouton8.pack(padx=5, pady=5, side="left")
         frame_aside.pack(fill="both", expand=True)
 
@@ -196,6 +204,30 @@ class EcranPrincipal(Ecran):
         # Liaison des événements clavier
         self.fenetre_principale.bind("<Key>", self.on_key_press)
 
+    def import_file(self):
+
+        file_path = filedialog.askopenfilename(filetypes=[("Fichiers texte", "*.txt"), ("Tous les fichiers", "*.*")])
+        if file_path:
+
+            if not file_path.lower().endswith(".txt"):
+                self.message_label.config(text="Veuillez sélectionner un fichier au format .txt")
+                return
+            self.load_music_file(file_path)
+
+    def load_music_file(self, file_path):
+
+        try:
+            with open(file_path, 'r') as file:
+                lines = file.readlines()
+
+            self.message_label.config(text=f"Fichier {file_path} importé avec succès")
+
+            # Jouer la séquence de musique après l'importation
+            self.play_sequence(file_path)
+
+        except Exception as e:
+            self.message_label.config(text=f"Erreur lors de l'importation du fichier : {e}")
+
     def on_key_press(self, event):
         """Callback pour jouer une note quand une touche du clavier est pressée."""
         note = self.notes_clavier.get(event.char, None)
@@ -204,13 +236,6 @@ class EcranPrincipal(Ecran):
             if frequency:
 
                 self.play(frequency, 0.125)  # Joue la note pendant 1 seconde
-
-    def lancer_musique(self):
-        ml = MusicPlayer()
-        ml.play(note_to_frequency["F7"], 1)
-        ml.play(note_to_frequency["B3"], 4)
-        ml.play(note_to_frequency["E5"], 0.5)
-
             
     def afficher(self):
         """
