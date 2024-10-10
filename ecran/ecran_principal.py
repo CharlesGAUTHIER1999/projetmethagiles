@@ -3,6 +3,9 @@ from ecran.ecran import Ecran
 from element.clavier import Clavier
 from ecran.getsionnaire_etat_ecran import GestionnaireEtatEcran
 import threading
+from tkinter import filedialog
+import tkinter as tk
+
 
 from note_frequence_base import note_to_frequency
 
@@ -153,7 +156,10 @@ class EcranPrincipal(Ecran):
         self.canvas.pack(fill="both", expand=True)
         
         frame_high = self.graphique.creer_frame(self.root_frame, bg='#cecece')
-        self.bouton = self.graphique.creer_button(frame=frame_high, fonction=self.on_key_press,
+        self.message_label = tk.Label(self.root_frame, text="", fg="red")
+        self.message_label.pack(padx=10, pady=10)
+
+        self.bouton = self.graphique.creer_button(frame=frame_high, fonction=self.import_file,
                                                   label="Importation d'un fichier")
         self.bouton.pack(padx=5, pady=5, side="left")
 
@@ -191,6 +197,30 @@ class EcranPrincipal(Ecran):
 
         # Liaison des événements clavier
         self.fenetre_principale.bind("<Key>", self.on_key_press)
+
+    def import_file(self):
+
+        file_path = filedialog.askopenfilename(filetypes=[("Fichiers texte", "*.txt"), ("Tous les fichiers", "*.*")])
+        if file_path:
+
+            if not file_path.lower().endswith(".txt"):
+                self.message_label.config(text="Veuillez sélectionner un fichier au format .txt")
+                return
+            self.load_music_file(file_path)
+
+    def load_music_file(self, file_path):
+
+        try:
+            with open(file_path, 'r') as file:
+                lines = file.readlines()
+
+            self.message_label.config(text=f"Fichier {file_path} importé avec succès")
+
+            # Jouer la séquence de musique après l'importation
+            self.play_sequence(file_path)
+
+        except Exception as e:
+            self.message_label.config(text=f"Erreur lors de l'importation du fichier : {e}")
 
     def on_key_press(self, event):
         """Callback pour jouer une note quand une touche du clavier est pressée."""
