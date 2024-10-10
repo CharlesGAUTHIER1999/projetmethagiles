@@ -6,6 +6,8 @@ import threading
 from tkinter import filedialog
 import tkinter as tk
 
+from MusicPlayer_Base import MusicPlayer as mp
+
 
 from note_frequence_base import note_to_frequency
 
@@ -169,7 +171,7 @@ class EcranPrincipal(Ecran):
                                                   label="Importation d'un fichier")
         self.bouton.pack(padx=5, pady=5, side="left")
         
-        self.bouton2 = self.graphique.creer_button(frame=frame_high, fonction=self.import_file,
+        self.bouton2 = self.graphique.creer_button(frame=frame_high, fonction=self.read_random_sequence,
                                                   label="Lecture Séquence Aléatoire")
         self.bouton2.pack(padx=5, pady=5, side="left")
 
@@ -217,6 +219,12 @@ class EcranPrincipal(Ecran):
                 self.message_label.config(text="Veuillez sélectionner un fichier au format .txt")
                 return
             self.load_music_file(file_path)
+
+    def read_random_sequence(self):
+        # Générer une séquence aléatoire de 10 notes
+        mp.generate_random_sequence(self,25, "test.txt")
+        self.play_sequence("test.txt")
+        
 
     def load_music_file(self, file_path):
 
