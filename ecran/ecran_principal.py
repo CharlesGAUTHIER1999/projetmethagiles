@@ -1,8 +1,8 @@
 from librairie.graphique.graphique_interface import GraphiqueInterface
 from ecran.ecran import Ecran
 from element.clavier import Clavier
-from MusicPlayer_Base import MusicPlayer
 from ecran.getsionnaire_etat_ecran import GestionnaireEtatEcran
+import threading
 
 from note_frequence_base import note_to_frequency
 
@@ -28,6 +28,9 @@ class EcranPrincipal(Ecran):
         self.fenetre_principale = None
         self.gestionnaire_etat_ecran = gestionnaire_etat_ecran
         self.graphique = graphique
+        self.is_playing = False  # Indique si une séquence est en cours
+        self.stop_requested = False  # Indique si l'arrêt a été demandé
+        self.current_sound = None
 
         pygame.mixer.init(frequency=44100, size=-16, channels=2)
         self.sample_rate = sample_rate
@@ -71,23 +74,66 @@ class EcranPrincipal(Ecran):
         sound.play()
         pygame.time.delay(int(duration * 1000)) # tenir la note la durée voulue
 
-    # Exemple de tonalité, extraire ce qui va bien pour pouvoir faire varier, pour simuler différents instruments
+    def play_sequence(self, filename):
+        if self.is_playing:
+            return  # Si la musique est déjà en cours, on ne relance pas une nouvelle lecture
+
+        # Lancer la lecture dans un thread séparé pour éviter le blocage de l'interface
+        self.is_playing = True
+        self.stop_requested = False  # Réinitialise la demande d'arrêt
+        threading.Thread(target=self._play_sequence_thread, args=(filename,)).start()
+
+    def _play_sequence_thread(self, filename):
+        try:
+            notes_sequence = []
+            duration_sequence = []
+
+            with open(filename, "r") as f:
+                for line in f:
+                    note = line.split()[0]
+                    duration = float(line.split()[1])
+                    notes_sequence.append(note)
+                    duration_sequence.append(duration)
+
+            for note, duration in zip(notes_sequence, duration_sequence):
+                if self.stop_requested:
+                    break  # Si l'arrêt est demandé, on quitte la boucle
+
+                if note == "Unknown":
+                    continue
+
+                if note == "0":  # Silence
+                    pygame.time.delay(int(duration * 1000))
+                    continue
+
+                frequency = note_to_frequency.get(note, None)
+                if frequency:
+                    self.play(frequency, duration)
+
+        finally:
+            self.is_playing = False  # Réinitialise l'état de lecture une fois terminé
+
     def play(self, frequency, duration):
-        # Créer une onde sinusoïdale à la fréquence spécifiée
         t = np.linspace(0, duration, int(self.sample_rate * duration), False)
         tone = np.sin(frequency * 2 * np.pi * t)
-
-        # Créer un tableau stéréo (2D) en dupliquant le ton
         stereo_tone = np.vstack((tone, tone)).T
-
-        # S'assurer que le tableau est contigu en mémoire
         contiguous_tone = np.ascontiguousarray((32767 * stereo_tone).astype(np.int16))
-
-        # Convertir l'onde sinusoïdale en un format audio et jouer
         sound = pygame.sndarray.make_sound(contiguous_tone)
-        sound.set_volume(0.05)  # Réglez le volume
+
+        # Vérifie s'il y a déjà un son qui est joué, comme ça on le stop
+        if self.current_sound:
+            self.current_sound.stop()
+        self.current_sound = sound
+        sound.set_volume(0.05)
         sound.play()
-        pygame.time.delay(int(duration * 500)) 
+        pygame.time.delay(int(duration * 500))
+
+    def stop_music(self):
+        if self.current_sound:
+            self.current_sound.stop()
+            self.current_sound = None
+        self.stop_requested = True  # Demande d'arrêt de la séquence
+        self.is_playing = False  # Réinitialiser l'état de lecture
 
     def initialiser_interface(self):
         """
@@ -106,18 +152,21 @@ class EcranPrincipal(Ecran):
         self.canvas = self.graphique.creer_canvas(frame_middle, bg="#fff")
         self.canvas.pack(fill="both", expand=True)
         
-        
         frame_high = self.graphique.creer_frame(self.root_frame, bg='#cecece')
-        self.bouton = self.graphique.creer_button(frame= frame_high, fonction= self.on_key_press, label="Importation d'un fichier")
+        self.bouton = self.graphique.creer_button(frame=frame_high, fonction=self.on_key_press,
+                                                  label="Importation d'un fichier")
         self.bouton.pack(padx=5, pady=5, side="left")
-        self.bouton2 = self.graphique.creer_button(frame= frame_high, fonction= self.on_key_press, label="Musique par défault")
-        self.bouton2.pack(padx=5, pady=5, side="left")
-        self.bouton3 = self.graphique.creer_button(frame= frame_high, fonction= self.on_key_press, label="RUN MUSIC")
+
+        self.bouton3 = self.graphique.creer_button(frame= frame_high, fonction= self.play_sequence("pirate.txt"), label="RUN MUSIC")
         self.bouton3.pack(padx=5, pady=5, side="left")
-        self.bouton4 = self.graphique.creer_button(frame= frame_high, fonction= self.on_key_press, label="STOP MUSIC")
+        self.bouton4 = self.graphique.creer_button(frame= frame_high, fonction=lambda: self.stop_music(), label="STOP MUSIC")
         self.bouton4.pack(padx=5, pady=5, side="left")       
         frame_high.pack(fill="both",expand=True)
         
+        self.btn_stop = self.graphique.creer_button(frame=frame_high, 
+                                                    label="Stop")
+        self.btn_stop.pack(padx=5, pady=5, side="left")
+
         frame_aside = self.graphique.creer_frame(self.root_frame, bg="#FF0000")
         self.bouton1 = self.graphique.creer_button(frame= frame_aside, fonction= self.on_key_press, label="I1")
         self.bouton1.pack(padx=5, pady=5, side="left")
@@ -135,17 +184,14 @@ class EcranPrincipal(Ecran):
         self.bouton7.pack(padx=5, pady=5, side="left")
         self.bouton8 = self.graphique.creer_button(frame= frame_aside, fonction= self.on_key_press, label="I8")
         self.bouton8.pack(padx=5, pady=5, side="left")
-        frame_aside.pack(fill="both",expand=True)
+        frame_aside.pack(fill="both", expand=True)
 
         # On crée l'instance du piano
-        self.clavier = Clavier(graphique=self.graphique, fenetre=frame_middle, canvas=self.canvas, largeur=30,
+        self.clavier = Clavier(graphique=self.graphique, fenetre=frame_middle, canvas=self.canvas, largeur=50,
                                hauteur=150, top_margin=40, type='', left_margin=350, taille_bouton=14)
 
         # Pour afficher le piano
         frame_middle.pack(side='top', fill="x", expand=True)
-
-        # On attend pour lancer la musique
-        # self.fenetre_principale.after(200, self.lancer_musique)
 
         # Liaison des événements clavier
         self.fenetre_principale.bind("<Key>", self.on_key_press)
@@ -157,12 +203,6 @@ class EcranPrincipal(Ecran):
             frequency = note_to_frequency.get(note, None)
             if frequency:
                 self.play(frequency, 1)  # Joue la note pendant 1 seconde
-
-    def lancer_musique(self):
-        ml = MusicPlayer()
-        ml.play(note_to_frequency["F7"], 1)
-        ml.play(note_to_frequency["B3"], 4)
-        ml.play(note_to_frequency["E5"], 0.5)
             
     def afficher(self):
         """

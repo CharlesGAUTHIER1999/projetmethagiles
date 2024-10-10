@@ -75,7 +75,7 @@ class GraphiqueInterfaceTk(GraphiqueInterface):
         fenetre.mainloop()
 
     def creer_button(self, frame, fonction: str, bg: str = None, activebackground: str = None, label=None,
-                     image: int = None, font: int = None, width=None, height: str = None):
+                     image: str = None, font: int = None, width=None, height: str = None):
         """
         Création d'un bouton.
 
