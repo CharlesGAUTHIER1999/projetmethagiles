@@ -157,32 +157,28 @@ class EcranPrincipal(Ecran):
                                                   label="Importation d'un fichier")
         self.bouton.pack(padx=5, pady=5, side="left")
 
-        self.bouton3 = self.graphique.creer_button(frame= frame_high, fonction= self.play_sequence("pirate.txt"), label="RUN MUSIC")
+        self.bouton3 = self.graphique.creer_button(frame=frame_high, fonction=lambda: self.play_sequence("pirate.txt"), label="RUN MUSIC")
         self.bouton3.pack(padx=5, pady=5, side="left")
-        self.bouton4 = self.graphique.creer_button(frame= frame_high, fonction=lambda: self.stop_music(), label="STOP MUSIC")
+        self.bouton4 = self.graphique.creer_button(frame=frame_high, fonction=lambda: self.stop_music(), label="STOP MUSIC")
         self.bouton4.pack(padx=5, pady=5, side="left")       
-        frame_high.pack(fill="both",expand=True)
-        
-        self.btn_stop = self.graphique.creer_button(frame=frame_high, 
-                                                    label="Stop")
-        self.btn_stop.pack(padx=5, pady=5, side="left")
+        frame_high.pack(fill="both", expand=True)
 
         frame_aside = self.graphique.creer_frame(self.root_frame, bg="#FF0000")
-        self.bouton1 = self.graphique.creer_button(frame= frame_aside, fonction= self.on_key_press, label="I1")
+        self.bouton1 = self.graphique.creer_button(frame=frame_aside, fonction= self.on_key_press, label="I1")
         self.bouton1.pack(padx=5, pady=5, side="left")
-        self.bouton2 = self.graphique.creer_button(frame= frame_aside, fonction= self.on_key_press, label="I2")
+        self.bouton2 = self.graphique.creer_button(frame=frame_aside, fonction= self.on_key_press, label="I2")
         self.bouton2.pack(padx=5, pady=5, side="left") 
-        self.bouton3 = self.graphique.creer_button(frame= frame_aside, fonction= self.on_key_press, label="I3")
+        self.bouton3 = self.graphique.creer_button(frame=frame_aside, fonction= self.on_key_press, label="I3")
         self.bouton3.pack(padx=5, pady=5, side="left")
-        self.bouton4 = self.graphique.creer_button(frame= frame_aside, fonction= self.on_key_press, label="I4")
+        self.bouton4 = self.graphique.creer_button(frame=frame_aside, fonction= self.on_key_press, label="I4")
         self.bouton4.pack(padx=5, pady=5, side="left")
-        self.bouton5 = self.graphique.creer_button(frame= frame_aside, fonction= self.on_key_press, label="I5")
+        self.bouton5 = self.graphique.creer_button(frame=frame_aside, fonction= self.on_key_press, label="I5")
         self.bouton5.pack(padx=5, pady=5, side="left")
-        self.bouton6 = self.graphique.creer_button(frame= frame_aside, fonction= self.on_key_press, label="I6")
+        self.bouton6 = self.graphique.creer_button(frame=frame_aside, fonction= self.on_key_press, label="I6")
         self.bouton6.pack(padx=5, pady=5, side="left")
-        self.bouton7 = self.graphique.creer_button(frame= frame_aside, fonction= self.on_key_press, label="I7")
+        self.bouton7 = self.graphique.creer_button(frame=frame_aside, fonction= self.on_key_press, label="I7")
         self.bouton7.pack(padx=5, pady=5, side="left")
-        self.bouton8 = self.graphique.creer_button(frame= frame_aside, fonction= self.on_key_press, label="I8")
+        self.bouton8 = self.graphique.creer_button(frame=frame_aside, fonction= self.on_key_press, label="I8")
         self.bouton8.pack(padx=5, pady=5, side="left")
         frame_aside.pack(fill="both", expand=True)
 
@@ -204,13 +200,6 @@ class EcranPrincipal(Ecran):
             if frequency:
 
                 self.play(frequency, 0.125)  # Joue la note pendant 1 seconde
-
-    def lancer_musique(self):
-        ml = MusicPlayer()
-        ml.play(note_to_frequency["F7"], 1)
-        ml.play(note_to_frequency["B3"], 4)
-        ml.play(note_to_frequency["E5"], 0.5)
-
             
     def afficher(self):
         """
