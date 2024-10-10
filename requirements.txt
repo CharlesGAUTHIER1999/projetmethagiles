@@ -1,3 +1,50 @@
 pillow
 pygame
 numpy
+
+
+from librairie.graphique.graphique_interface import GraphiqueInterface
+from ecran.ecran import Ecran
+from element.clavier import Clavier
+from MusicPlayer_Base import MusicPlayer
+from ecran.getsionnaire_etat_ecran import GestionnaireEtatEcran
+
+from note_frequence_base import note_to_frequency
+
+
+import numpy as np
+import pygame
+
+
+import numpy as np
+import pygame
+from note_frequence_base import note_to_frequency
+
+from librairie.graphique.graphique_interface_tk import GraphiqueInterfaceTk
+from ecran.ecran_principal import EcranPrincipal
+from enums.ecran_etat_enum import EcranEtat
+from ecran.getsionnaire_etat_ecran import GestionnaireEtatEcran
+from enum import Enum
+
+if __name__ == "__main__":
+    graphic = GraphiqueInterfaceTk()
+    
+    gestionnaire_etat_ecran = GestionnaireEtatEcran()
+
+    ecran_principal = EcranPrincipal(graphic, gestionnaire_etat_ecran)
+    gestionnaire_etat_ecran.ajouter_ecran(EcranEtat.PRINCIPAL, ecran_principal)
+
+    gestionnaire_etat_ecran.afficher_etat()
+
+    Bouton stop
+    Bouton 
+
+    from enums.ecran_etat_enum import EcranEtat
+from ecran.ecran import Ecran
+
+
+from librairie.graphique.graphique_interface import GraphiqueInterface
+    import tkinter as tk
+from tkinter import ttk
+from PIL import Image, ImageTk
+from librairie.graphique.graphique_interface import GraphiqueInterface
