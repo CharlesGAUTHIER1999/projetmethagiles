@@ -1,6 +1,6 @@
 from librairie.graphique.graphique_interface import GraphiqueInterface
 from ecran.ecran import Ecran
-from element.plateau import Clavier
+from element.clavier import Clavier
 from MusicPlayer_Base import MusicPlayer
 from ecran.getsionnaire_etat_ecran import GestionnaireEtatEcran
 
@@ -125,7 +125,7 @@ class EcranPrincipal(Ecran):
         if note:
             frequency = note_to_frequency.get(note, None)
             if frequency:
-                self.play(frequency, 1)  # Joue la note pendant 1 seconde
+                self.play(frequency, 0.2)  # Joue la note pendant 1 seconde
 
     def lancer_musique(self):
         ml = MusicPlayer()

@@ -7,6 +7,24 @@ class MusicPlayer:
         pygame.mixer.init(frequency=sample_rate, size=-16, channels=2)
         self.sample_rate = sample_rate
 
+    # Exemple de tonalité, extraire ce qui va bien pour pouvoir faire varier, pour simuler différents instruments
+    def play(self, frequency, duration):
+        # Créer une onde sinusoïdale à la fréquence spécifiée
+        t = np.linspace(0, duration, int(self.sample_rate * duration), False)
+        tone = np.sin(frequency * 2 * np.pi * t)
+
+        # Créer un tableau stéréo (2D) en dupliquant le ton
+        stereo_tone = np.vstack((tone, tone)).T
+
+        # S'assurer que le tableau est contigu en mémoire
+        contiguous_tone = np.ascontiguousarray((32767 * stereo_tone).astype(np.int16))
+
+        # Convertir l'onde sinusoïdale en un format audio et jouer
+        sound = pygame.sndarray.make_sound(contiguous_tone)
+        sound.set_volume(0.05)  # Réglez le volume
+        sound.play()
+        pygame.time.delay(int(duration * 500))
+
     def apply_adsr_envelope(self, tone, attack, decay, sustain_level, release, duration):
         total_samples = int(self.sample_rate * duration)
         envelope = np.zeros(total_samples)
@@ -66,6 +84,21 @@ class MusicPlayer:
         sound.play()
         pygame.time.delay(int(duration * 1000))
 
+    # génère une suite de notes aléatoires
+    def generate_random_sequence(self, num_notes, filename):
+        notes = list(note_to_frequency.keys())
+        sub_notes = notes[37:61]
+        print(sub_notes)
+        sub_notes.append("Unknown")
+
+        with open(filename, "w") as f:
+            for _ in range(num_notes):
+                note = np.random.choice(sub_notes)
+                duration = np.random.uniform(0.1, 0.5)
+                f.write(f"{note} {duration}\n")
+
+
+
     # lecture d'un fichier texte contenant une séquence de notes
     def play_sequence(self, filename):
         notes_sequence = []
@@ -98,4 +131,8 @@ class MusicPlayer:
 # Code pour jouer la suite de notes
 if __name__ == "__main__":
     mp = MusicPlayer()
-    mp.play_sequence("pirate.txt")
+    # mp.play_sequence("pirate.txt")
+    mp.generate_random_sequence(25, "test.txt")
+    with open("test.txt", "a") as f:
+        f.write("0 0.5\n")
+    mp.play_sequence("test.txt")
