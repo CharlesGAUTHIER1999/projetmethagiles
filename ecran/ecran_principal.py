@@ -111,7 +111,11 @@ class EcranPrincipal(Ecran):
         self.bouton = self.graphique.creer_button(frame= frame_high, fonction= self.on_key_press, label="Importation d'un fichier")
         self.bouton.pack(padx=5, pady=5, side="left")
         self.bouton2 = self.graphique.creer_button(frame= frame_high, fonction= self.on_key_press, label="Musique par défault")
-        self.bouton2.pack(padx=5, pady=5, side="left")       
+        self.bouton2.pack(padx=5, pady=5, side="left")
+        self.bouton3 = self.graphique.creer_button(frame= frame_high, fonction= self.on_key_press, label="RUN MUSIC")
+        self.bouton3.pack(padx=5, pady=5, side="left")
+        self.bouton4 = self.graphique.creer_button(frame= frame_high, fonction= self.on_key_press, label="STOP MUSIC")
+        self.bouton4.pack(padx=5, pady=5, side="left")       
         frame_high.pack(fill="both",expand=True)
         
         frame_aside = self.graphique.creer_frame(self.root_frame, bg="#FF0000")
