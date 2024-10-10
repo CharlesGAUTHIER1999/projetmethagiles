@@ -1,6 +1,7 @@
 import numpy as np
 import pygame
 from note_frequence_base import note_to_frequency
+from note_frequence_base import note_to_frequency_noires
 
 class MusicPlayer:
     def __init__(self, sample_rate=44100):
@@ -86,16 +87,16 @@ class MusicPlayer:
 
     # génère une suite de notes aléatoires
     def generate_random_sequence(self, num_notes, filename):
-        notes = list(note_to_frequency.keys())
-        sub_notes = notes[37:61]
-        print(sub_notes)
-        sub_notes.append("Unknown")
+        notes = list(note_to_frequency_noires.keys())
+        
+        print(notes)
+        notes.append("Unknown")
 
         with open(filename, "w") as f:
             for _ in range(num_notes):
-                note = np.random.choice(sub_notes)
-                duration = np.random.uniform(0.1, 0.5)
-                f.write(f"{note} {duration}\n")
+                note = np.random.choice(notes)
+                # duration = np.random.uniform(0.1, 0.5)
+                f.write(f"{note} {0.25}\n")
 
 
 
