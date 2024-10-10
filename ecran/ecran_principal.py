@@ -168,6 +168,10 @@ class EcranPrincipal(Ecran):
         self.bouton = self.graphique.creer_button(frame=frame_high, fonction=self.import_file,
                                                   label="Importation d'un fichier")
         self.bouton.pack(padx=5, pady=5, side="left")
+        
+        self.bouton2 = self.graphique.creer_button(frame=frame_high, fonction=self.import_file,
+                                                  label="Lecture Séquence Aléatoire")
+        self.bouton2.pack(padx=5, pady=5, side="left")
 
         self.bouton3 = self.graphique.creer_button(frame=frame_high, fonction=lambda: self.play_sequence("pirate.txt"), label="RUN MUSIC")
         self.bouton3.pack(padx=5, pady=5, side="left")
