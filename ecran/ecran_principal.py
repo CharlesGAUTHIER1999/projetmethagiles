@@ -202,7 +202,15 @@ class EcranPrincipal(Ecran):
         if note:
             frequency = note_to_frequency.get(note, None)
             if frequency:
-                self.play(frequency, 1)  # Joue la note pendant 1 seconde
+
+                self.play(frequency, 0.125)  # Joue la note pendant 1 seconde
+
+    def lancer_musique(self):
+        ml = MusicPlayer()
+        ml.play(note_to_frequency["F7"], 1)
+        ml.play(note_to_frequency["B3"], 4)
+        ml.play(note_to_frequency["E5"], 0.5)
+
             
     def afficher(self):
         """
