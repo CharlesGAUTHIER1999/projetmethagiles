@@ -1,6 +1,6 @@
 from librairie.graphique.graphique_interface import GraphiqueInterface
 from ecran.ecran import Ecran
-from element.plateau import Clavier
+from element.clavier import Clavier
 from MusicPlayer_Base import MusicPlayer
 from ecran.getsionnaire_etat_ecran import GestionnaireEtatEcran
 
@@ -105,6 +105,33 @@ class EcranPrincipal(Ecran):
 
         self.canvas = self.graphique.creer_canvas(frame_middle, bg="#fff")
         self.canvas.pack(fill="both", expand=True)
+        
+        
+        frame_high = self.graphique.creer_frame(self.root_frame, bg='#cecece')
+        self.bouton = self.graphique.creer_button(frame= frame_high, fonction= self.on_key_press, label="Importation d'un fichier")
+        self.bouton.pack(padx=5, pady=5, side="left")
+        self.bouton2 = self.graphique.creer_button(frame= frame_high, fonction= self.on_key_press, label="Musique par défault")
+        self.bouton2.pack(padx=5, pady=5, side="left")       
+        frame_high.pack(fill="both",expand=True)
+        
+        frame_aside = self.graphique.creer_frame(self.root_frame, bg="#FF0000")
+        self.bouton1 = self.graphique.creer_button(frame= frame_aside, fonction= self.on_key_press, label="I1")
+        self.bouton1.pack(padx=5, pady=5, side="left")
+        self.bouton2 = self.graphique.creer_button(frame= frame_aside, fonction= self.on_key_press, label="I2")
+        self.bouton2.pack(padx=5, pady=5, side="left") 
+        self.bouton3 = self.graphique.creer_button(frame= frame_aside, fonction= self.on_key_press, label="I3")
+        self.bouton3.pack(padx=5, pady=5, side="left")
+        self.bouton4 = self.graphique.creer_button(frame= frame_aside, fonction= self.on_key_press, label="I4")
+        self.bouton4.pack(padx=5, pady=5, side="left")
+        self.bouton5 = self.graphique.creer_button(frame= frame_aside, fonction= self.on_key_press, label="I5")
+        self.bouton5.pack(padx=5, pady=5, side="left")
+        self.bouton6 = self.graphique.creer_button(frame= frame_aside, fonction= self.on_key_press, label="I6")
+        self.bouton6.pack(padx=5, pady=5, side="left")
+        self.bouton7 = self.graphique.creer_button(frame= frame_aside, fonction= self.on_key_press, label="I7")
+        self.bouton7.pack(padx=5, pady=5, side="left")
+        self.bouton8 = self.graphique.creer_button(frame= frame_aside, fonction= self.on_key_press, label="I8")
+        self.bouton8.pack(padx=5, pady=5, side="left")
+        frame_aside.pack(fill="both",expand=True)
 
         # On crée l'instance du piano
         self.clavier = Clavier(graphique=self.graphique, fenetre=frame_middle, canvas=self.canvas, largeur=30,
