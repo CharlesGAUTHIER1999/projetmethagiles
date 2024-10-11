@@ -10,7 +10,7 @@ from note_frequence_base import note_to_frequency
 
 import numpy as np
 import pygame
-
+from MusicPlayer_Base import MusicPlayer as mp
 
 class EcranPrincipal(Ecran):
     def __init__(self, graphique: GraphiqueInterface, gestionnaire_etat_ecran: GestionnaireEtatEcran, sample_rate=44100):
