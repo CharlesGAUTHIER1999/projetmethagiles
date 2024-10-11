@@ -12,7 +12,7 @@ class Clavier:
 
         # Dictionnaire pour stocker les touches
         self.touches = {}
-        self.list_touches = ['a', 'z', 'e', 'r', 't', 'y', 'u', 'w', 'x', 'c', 'v', 'b', 'n', ',']
+        self.list_touches = ['a', 'z', 'e', 'r', 't', 'y', 'u', 'v', 'b', 'n', ',', ';', ':', '!']
         self.create_clavier_piano(largeur, hauteur, top_margin, left_margin, taille_bouton)
 
     def create_clavier_piano(self, largeur: int, hauteur: int, top_margin: int, left_margin: int, nb_touches: int) -> None:
