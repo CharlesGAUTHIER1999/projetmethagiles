@@ -1,3 +1,9 @@
 pillow
 pygame
+<<<<<<< HEAD
 numpy
+=======
+numpy
+tkinter
+PIL
+>>>>>>> Charles123radio

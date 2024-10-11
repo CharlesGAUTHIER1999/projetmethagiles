@@ -5,9 +5,8 @@ from ecran.getsionnaire_etat_ecran import GestionnaireEtatEcran
 import threading
 from tkinter import filedialog
 import tkinter as tk
-
+from MusicPlayer_Base import MusicPlayer as mp
 from note_frequence_base import note_to_frequency
-
 import numpy as np
 import pygame
 from MusicPlayer_Base import MusicPlayer as mp
@@ -16,17 +15,6 @@ import re
 
 class EcranPrincipal(Ecran):
     def __init__(self, graphique: GraphiqueInterface, gestionnaire_etat_ecran: GestionnaireEtatEcran, sample_rate=44100):
-        """
-        Initialise la classe EcranPrincipal.
-        ----------------------------------------------------------
-
-        Args:
-            self (EcranGameBasic) : l'instance de la classe ViewPlateau.
-            graphique (GraphiqueInterface) : l'instance de la classe GraphiqueInterface.
-            gestionnaire_etat_ecran (GestionnaireEtatEcran) : l'instance de la classe GestionnaireEtatEcran.
-
-        """
-        # On l'initialise à None pour pouvoir rentrer dans la fonction initialiser
         super().__init__()
         self.fenetre_principale = None
         self.gestionnaire_etat_ecran = gestionnaire_etat_ecran
@@ -37,9 +25,13 @@ class EcranPrincipal(Ecran):
         self.touches_piano = {}
         self.current_sound = None
 
-        pygame.mixer.init(frequency=44100, size=-16, channels=2)
+        self.fonctionRand = None
+        self.fonctionRand2 = None
+
+        pygame.mixer.init(frequency=sample_rate, size=-16, channels=2)
         self.sample_rate = sample_rate
 
+        # Mappage des touches du clavier aux notes de piano
         self.notes_clavier = {
             # blanches
             'a': 'C4',
@@ -69,36 +61,41 @@ class EcranPrincipal(Ecran):
             'm': 'A#5',
         }
 
-    # c'est le tone passé en entrée qu'il faudra modifier en fonction de l'instrument joué
-    # cette méthode pourra être appelée ensuite quelque soit l'instrument choisi
     def _play_tone(self, tone, duration):
         stereo_tone = np.vstack((tone, tone)).T
         contiguous_tone = np.ascontiguousarray((32767 * stereo_tone).astype(np.int16))
         sound = pygame.sndarray.make_sound(contiguous_tone)
-        sound.set_volume(0.05)  # Réglez le volume
+        sound.set_volume(0.05)  
         sound.play()
-        pygame.time.delay(int(duration * 1000)) # tenir la note la durée voulue
+        pygame.time.delay(int(duration * 1000))
 
     def play_sequence(self, filename, tempo):
+        print("tempo1", tempo)
         if self.is_playing:
-            return  # Si la musique est déjà en cours, on ne relance pas une nouvelle lecture
-
-        # Lancer la lecture dans un thread séparé pour éviter le blocage de l'interface
+            return  # Empêcher de relancer une lecture si une séquence est en cours
         self.is_playing = True
         self.stop_requested = False  # Réinitialise la demande d'arrêt
         threading.Thread(target=self._play_sequence_thread, args=(filename, tempo)).start()
 
     def _play_sequence_thread(self, filename, tempo):
-        try:
-            notes_sequence = []
-            duration_sequence = []
+        print("tempo2", tempo)
 
+        if tempo == "60":
+            print("tempo 60")
+            tempo = 2
+        elif tempo == "90":
+            print("tempo 90")
+            tempo = 1
+        elif tempo == "120":
+            print("tempo 120")
+            tempo = 0.5
+        try:
+            notes_sequence, duration_sequence = [], []
             with open(filename, "r") as f:
                 for line in f:
-                    note = line.split()[0]
-                    duration = float(line.split()[1])
+                    note, duration = line.split()
                     notes_sequence.append(note)
-                    duration_sequence.append(duration)
+                    duration_sequence.append(float(duration))
 
             for note, duration in zip(notes_sequence, duration_sequence):
                 if self.stop_requested:
@@ -108,31 +105,28 @@ class EcranPrincipal(Ecran):
                     continue
 
                 if note == "0":  # Silence
-                    pygame.time.delay(int(duration * 1000 * tempo))
+                    pygame.time.delay(int(duration * 1000 * float(tempo)))
 
                     continue
 
                 frequency = note_to_frequency.get(note, None)
                 if frequency:
-                    self.play(frequency, duration * tempo)
-
+                    self.play(frequency, duration * float(tempo))
         finally:
-            self.is_playing = False  # Réinitialise l'état de lecture une fois terminé
+            self.is_playing = False  
 
     def play(self, frequency, duration):
         t = np.linspace(0, duration, int(self.sample_rate * duration), False)
-                # Synthèse additive avec plusieurs harmoniques pour imiter le son d'un piano
-        tone = (0.7 * np.sin(frequency * 2 * np.pi * t) +               # Fondamentale
-            0.2 * np.sin(2 * frequency * 2 * np.pi * t) +           # 1ère harmonique
-            0.1 * np.sin(3 * frequency * 2 * np.pi * t) +           # 2ème harmonique
-            0.05 * np.sin(4 * frequency * 2 * np.pi * t) +          # 3ème harmonique
-            0.03 * np.sin(5 * frequency * 2 * np.pi * t))           # 4ème harmonique
+        tone = (0.7 * np.sin(frequency * 2 * np.pi * t) +
+                0.2 * np.sin(2 * frequency * 2 * np.pi * t) +
+                0.1 * np.sin(3 * frequency * 2 * np.pi * t) +
+                0.05 * np.sin(4 * frequency * 2 * np.pi * t) +
+                0.03 * np.sin(5 * frequency * 2 * np.pi * t))
 
         stereo_tone = np.vstack((tone, tone)).T
         contiguous_tone = np.ascontiguousarray((32767 * stereo_tone).astype(np.int16))
         sound = pygame.sndarray.make_sound(contiguous_tone)
 
-        # Vérifie s'il y a déjà un son qui est joué, comme ça on le stop
         if self.current_sound:
             self.current_sound.stop()
         self.current_sound = sound
@@ -144,101 +138,109 @@ class EcranPrincipal(Ecran):
         if self.current_sound:
             self.current_sound.stop()
             self.current_sound = None
-        # Demande d'arrêt de la séquence
         self.stop_requested = True
-
-        # Réinitialiser l'état de lecture
         self.is_playing = False
 
     def initialiser_interface(self):
-        """
-        Initialise l'interface de la fenêtre EcranPrincipal.
-
-        ----------------------------------------------------------
-        """
         self.fenetre_principale = self.graphique.creer_fenetre("Fenêtre Principale", 1400, 800, "")
-
         self.root_frame = self.graphique.creer_frame(self.fenetre_principale, bg="#fff")
         self.root_frame.pack(fill='both', expand=True)
 
-        # Le frame pour les éléments du milieu (le piano)
         frame_middle = self.graphique.creer_frame(self.root_frame, bg="#fff")
-
         self.canvas = self.graphique.creer_canvas(frame_middle, bg="#fff")
         self.canvas.pack(fill="both", expand=True)
         
-        self.frame_high = self.graphique.creer_frame(self.root_frame, bg='#cecece')
+        frame_high = self.graphique.creer_frame(self.root_frame, bg='#cecece')
+        self.frame_high_left = self.graphique.creer_frame(frame_high, bg='#cecece')
+        self.frame_high_right = self.graphique.creer_frame(frame_high, bg='#cecece')
         self.message_label = tk.Label(self.root_frame, text="", fg="red")
         self.message_label.pack(padx=10, pady=10)
 
-        self.bouton = self.graphique.creer_button(frame=self.frame_high, fonction=self.import_file,
-                                                  label="Importation d'un fichier")
+        def update_fonctionRand2(fonction):
+            self.fonctionRand2 = fonction
+            print("fonctionRand", self.fonctionRand2)
+
+        # Boutons gauche
+        self.bouton = self.graphique.creer_button(frame=self.frame_high_left, fonction=lambda: self.import_file(self.fonctionRand2), label="Importation d'un fichier")
         self.bouton.pack(padx=5, pady=5, side="left")
-
-        self.entre = tk.Entry(self.frame_high, width=30)
-        self.entre.pack(side="left", padx=5, pady=5)
-
-        # On met le focus sur le champ de saisi
-        self.entre.focus_set()
-
-        print(self.entre.get())
-
-        # Bouton Lecture Séquence Aléatoire
-        self.bouton2 = self.graphique.creer_button(
-            frame=self.frame_high,
-            fonction=self.read_random_sequence,
-            label="Lecture Séquence Aléatoire"
-        )
-
-        self.bouton2.pack(padx=5, pady=5, side="left")
-
-        self.bouton3 = self.graphique.creer_button(frame=self.frame_high, fonction=lambda: self.play_sequence("pirate.txt", 1), label="RUN MUSIC")
+        self.bouton3 = self.graphique.creer_button(frame=self.frame_high_left, fonction=lambda: self.play_sequence("pirate.txt", self.fonctionRand2), label="RUN MUSIC")
         self.bouton3.pack(padx=5, pady=5, side="left")
-        self.bouton4 = self.graphique.creer_button(frame=self.frame_high, fonction=lambda: self.stop_music(), label="STOP MUSIC")
-        self.bouton4.pack(padx=5, pady=5, side="left")       
-        self.frame_high.pack(fill="both", expand=True)
-
-        frame_aside = self.graphique.creer_frame(self.root_frame, bg="#FF0000")
-        self.bouton1 = self.graphique.creer_button(frame=frame_aside, fonction=None, label="I1")
-        self.bouton1.pack(padx=5, pady=5, side="left")
-        self.bouton2 = self.graphique.creer_button(frame=frame_aside, fonction=None, label="I2")
-        self.bouton2.pack(padx=5, pady=5, side="left") 
-        self.bouton3 = self.graphique.creer_button(frame=frame_aside, fonction=None, label="I3")
-        self.bouton3.pack(padx=5, pady=5, side="left")
-        self.bouton4 = self.graphique.creer_button(frame=frame_aside, fonction=None, label="I4")
+        self.bouton4 = self.graphique.creer_button(frame=self.frame_high_left, fonction=lambda: self.stop_music(), label="STOP MUSIC")
         self.bouton4.pack(padx=5, pady=5, side="left")
-        self.bouton5 = self.graphique.creer_button(frame=frame_aside, fonction=None, label="I5")
-        self.bouton5.pack(padx=5, pady=5, side="left")
-        self.bouton6 = self.graphique.creer_button(frame=frame_aside, fonction=None, label="I6")
-        self.bouton6.pack(padx=5, pady=5, side="left")
-        self.bouton7 = self.graphique.creer_button(frame=frame_aside, fonction=None, label="I7")
-        self.bouton7.pack(padx=5, pady=5, side="left")
-        self.bouton8 = self.graphique.creer_button(frame=frame_aside, fonction=None, label="I8")
-        self.bouton8.pack(padx=5, pady=5, side="left")
+
+        choix2  = tk.StringVar()
+        choix2.set(60)  # Valeur par défaut
+
+        self.boutonRadio5 = self.graphique.creer_radiobutton(frame=self.frame_high_left, variable=choix2, value=60, label="Lent", command=lambda: update_fonctionRand2(choix2.get()))
+        self.boutonRadio5.pack(padx=5, pady=5, side="left")
+        self.boutonRadio6 = self.graphique.creer_radiobutton(frame=self.frame_high_left, variable=choix2, value=90, label="Normal", command=lambda: update_fonctionRand2(choix2.get()))
+        self.boutonRadio6.pack(padx=5, pady=5, side="left")
+        self.boutonRadio7 = self.graphique.creer_radiobutton(frame=self.frame_high_left, variable=choix2, value=120, label="Rapide", command=lambda: update_fonctionRand2(choix2.get()))
+        self.boutonRadio7.pack(padx=5, pady=5, side="left")
+
+
+        
+
+        def update_fonctionRand(fonction):
+            self.fonctionRand = fonction
+            print("fonctionRand", self.fonctionRand)
+        # Boutons droite
+        self.bouton2 = self.graphique.creer_button(frame=self.frame_high_right, fonction=lambda: self.read_random_sequence(self.fonctionRand), label="Lecture Séquence Aléatoire")
+        self.bouton2.pack(padx=5, pady=5, side="left")
+        
+        # ajouter 4 radios dans le self.frame_high_right
+
+        choix  = tk.StringVar()
+        choix.set(60)  # Valeur par défaut
+
+        self.entre = tk.Entry(self.frame_high_right, width=30)
+        self.entre.pack(side="left", padx=5, pady=5)# On met le focus sur le champ de saisiself.entre.focus_set()print(self.entre.get())
+
+        self.boutonRadio1 = self.graphique.creer_radiobutton(frame=self.frame_high_right, variable=choix, value=60, label="Lent", command=lambda: update_fonctionRand(choix.get()))
+        self.boutonRadio1.pack(padx=5, pady=5, side="left")
+        self.boutonRadio2 = self.graphique.creer_radiobutton(frame=self.frame_high_right, variable=choix, value=90, label="Normal", command=lambda: update_fonctionRand(choix.get()))
+        self.boutonRadio2.pack(padx=5, pady=5, side="left")
+        self.boutonRadio3 = self.graphique.creer_radiobutton(frame=self.frame_high_right, variable=choix, value=120, label="Rapide", command=lambda: update_fonctionRand(choix.get()))
+        self.boutonRadio3.pack(padx=5, pady=5, side="left")
+        self.boutonRadio4 = self.graphique.creer_radiobutton(frame=self.frame_high_right, variable=choix, value="Aléatoire", label="Aléatoire", command=lambda: update_fonctionRand(choix.get()))
+        self.boutonRadio4.pack(padx=5, pady=5, side="left")
+
+
+
+        self.boutonStop = self.graphique.creer_button(frame=self.frame_high_right, fonction=lambda: self.stop_music(), label="STOP MUSIC")
+        self.boutonStop.pack(padx=5, pady=5, side="left")
+
+        frame_high.pack(fill="both", expand=True)
+
+        # Frame aside avec des boutons pour les instruments
+        frame_aside = self.graphique.creer_frame(self.root_frame, bg="#FF0000")
+        for i in range(1, 9):
+            self.graphique.creer_button(frame=frame_aside, fonction=self.on_key_press, label=f"I{i}").pack(padx=5, pady=5, side="left")
         frame_aside.pack(fill="both", expand=True)
 
-        # On crée l'instance du piano
+        # Piano
         self.clavier = Clavier(graphique=self.graphique, fenetre=frame_middle, canvas=self.canvas, largeur=50,
                                hauteur=150, top_margin=40, type='', left_margin=350)
 
         # Pour afficher le piano
         frame_middle.pack(side='top', fill="x", expand=True)
 
-        # Liaison des événements clavier
+        self.frame_high_left.pack(side="left", fill="both", expand=True)
+        self.frame_high_right.pack(side="right", fill="both", expand=True)
+
         self.fenetre_principale.bind("<Key>", self.on_key_press)
 
-    def import_file(self):
+    def import_file(self, tempo):
         """Methode qui charge le fichier et qui joue les notes qui sont dedans"""
 
         file_path = filedialog.askopenfilename(filetypes=[("Fichiers texte", "*.txt"), ("Tous les fichiers", "*.*")])
         if file_path:
-
             if not file_path.lower().endswith(".txt"):
                 self.message_label.config(text="Veuillez sélectionner un fichier au format .txt")
                 return
-            self.load_music_file(file_path)
+            self.load_music_file(file_path, tempo)
 
-    def read_random_sequence(self):
+    def read_random_sequence(self,tempo):
         """
         Fonction qui génère une séquence aléatoire et la joue en fonction du tempo saisi.
         """
@@ -259,10 +261,11 @@ class EcranPrincipal(Ecran):
 
         # Générer une séquence aléatoire de notes et jouer la séquence
         print(f"Lecture de la séquence aléatoire avec un tempo de : {nb_de_notes}")
-        mp.generate_random_sequence(self, nb_de_notes * 2, "test.txt", 1)
-        self.play_sequence("test.txt", 1)
+        if tempo != None :
+            mp.generate_random_sequence(self, nb_de_notes * 2, "test.txt", tempo)
+            self.play_sequence("test.txt", 1)
 
-    def load_music_file(self, file_path):
+    def load_music_file(self, file_path, tempo):
         self.message_label.config(text="")
         try:
             with open(file_path, 'r') as file:
@@ -315,7 +318,7 @@ class EcranPrincipal(Ecran):
         #         return
 
         # Jouer la séquence de musique après l'importation
-        self.play_sequence(file_path, 1)
+        self.play_sequence(file_path, tempo)
 
     def action_avancer(self):
         message = f"Choisissez la vitesse : \n la vitesse doit être comprise entre 0.5 à 3."
@@ -361,10 +364,4 @@ class EcranPrincipal(Ecran):
                         self.fenetre_principale.after(150, lambda: self.canvas.itemconfig(touche_id, fill="black"))
 
     def afficher(self):
-        """
-        Affiche la fenêtre principale.
-
-        ----------------------------------------------------------
-
-        """
         self.graphique.ouvrir_fenetre(self.fenetre_principale)
