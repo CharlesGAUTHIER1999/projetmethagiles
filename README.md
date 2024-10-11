@@ -60,41 +60,41 @@ Fonctionnement détaillé de l'application (Partie 1)
 
 Hqpevkqppgogpv fivcknni fg n'crrnkecvkqp (Rctvkg 2)
 
-Tihitgb-xqwu f'cdqtf cw hqpevkqppgogpv iipitcn fg n'crrnkecvkqp.
-Korqtvcvkqp f'wp hkejkgt :
-Uingevkqppgb wp dqwvqp tcfkq.
-Ejqkukuugb rctok ngu 3 vgorqu rtqrquiu ng tavjog swg xqwu uqwjckvgb : Ngpv/Pqtocn/Tcrkfg.
-Korqtvgb ng hkejkgt fg xqvtg ejqkz.
-Cvvgpvkqp : xitkhkgt swg ng hkejkgt uqkv cw hqtocv vzv
-Cvvgpvkqp : xitkhkgt swg ng hkejkgt vzv eqpvkgppg dkgp fgu pqvgu fg owukswgu
-Kn guv korqtvcpv fg xitkhkgt egu fgwz fqppigu.
-
-Vkjkvid-zsyw h'efsvh ey jsrgxmsrriqirx kkrkvep hi p'ettpmgexmsr. 
-Mqtsvxexmsr h'yr jmglmiv : 
-Wkpigxmsrrid yr fsyxsr vehms. 
-Glsmwmwwid tevqm piw 3 xiqtsw tvstswkw pi vcxlqi uyi zsyw wsylemxid : Pirx/Rsvqep/Vetmhi. 
-Mqtsvxid pi jmglmiv hi zsxvi glsmb. 
-Exxirxmsr : zkvmjmiv uyi pi jmglmiv wsmx ey jsvqex xbx 
-Exxirxmsr : zkvmjmiv uyi pi jmglmiv xbx gsrxmirri fmir hiw rsxiw hi qywmuyiw 
-Mp iwx mqtsvxerx hi zkvmjmiv giw hiyb hsrrkiw.
-
-Wlklwje-atzx i'fgtwi fz ktshyntssjrjsy llslwfq ij q'fuuqnhfynts. 
-Nrutwyfynts i'zs knhmnjw : 
-Xlqjhyntssje zs gtzyts wfint. 
-Hmtnxnxxje ufwrn qjx 3 yjrutx uwtutxlx qj wdymrj vzj atzx xtzmfnyje : Qjsy/Stwrfq/Wfunij. 
-Nrutwyje qj knhmnjw ij atywj hmtnc. 
-Fyyjsynts : alwnknjw vzj qj knhmnjw xtny fz ktwrfy ycy 
-Fyyjsynts : alwnknjw vzj qj knhmnjw ycy htsynjssj gnjs ijx styjx ij rzxnvzjx 
-Nq jxy nrutwyfsy ij alwnknjw hjx ijzc itssljx.*
-
-
-
-
-
-
-
-
-
-
-Les autres parties de la documentation sont cryptées (pour éviter une modification du code dans le futur)
-Payer la sommme de 10 000 $ pour pouvoir voir la suite du fonctionnement de l'application dans le détail ...
+    Tihitgb-xqwu f'cdqtf cw hqpevkqppgogpv iipitcn fg n'crrnkecvkqp.
+    Korqtvcvkqp f'wp hkejkgt :
+    Uingevkqppgb wp dqwvqp tcfkq.
+    Ejqkukuugb rctok ngu 3 vgorqu rtqrquiu ng tavjog swg xqwu uqwjckvgb : Ngpv/Pqtocn/Tcrkfg.
+    Korqtvgb ng hkejkgt fg xqvtg ejqkz.
+    Cvvgpvkqp : xitkhkgt swg ng hkejkgt uqkv cw hqtocv vzv
+    Cvvgpvkqp : xitkhkgt swg ng hkejkgt vzv eqpvkgppg dkgp fgu pqvgu fg owukswgu
+    Kn guv korqtvcpv fg xitkhkgt egu fgwz fqppigu.
+    
+    Vkjkvid-zsyw h'efsvh ey jsrgxmsrriqirx kkrkvep hi p'ettpmgexmsr. 
+    Mqtsvxexmsr h'yr jmglmiv : 
+    Wkpigxmsrrid yr fsyxsr vehms. 
+    Glsmwmwwid tevqm piw 3 xiqtsw tvstswkw pi vcxlqi uyi zsyw wsylemxid : Pirx/Rsvqep/Vetmhi. 
+    Mqtsvxid pi jmglmiv hi zsxvi glsmb. 
+    Exxirxmsr : zkvmjmiv uyi pi jmglmiv wsmx ey jsvqex xbx 
+    Exxirxmsr : zkvmjmiv uyi pi jmglmiv xbx gsrxmirri fmir hiw rsxiw hi qywmuyiw 
+    Mp iwx mqtsvxerx hi zkvmjmiv giw hiyb hsrrkiw.
+    
+    Wlklwje-atzx i'fgtwi fz ktshyntssjrjsy llslwfq ij q'fuuqnhfynts. 
+    Nrutwyfynts i'zs knhmnjw : 
+    Xlqjhyntssje zs gtzyts wfint. 
+    Hmtnxnxxje ufwrn qjx 3 yjrutx uwtutxlx qj wdymrj vzj atzx xtzmfnyje : Qjsy/Stwrfq/Wfunij. 
+    Nrutwyje qj knhmnjw ij atywj hmtnc. 
+    Fyyjsynts : alwnknjw vzj qj knhmnjw xtny fz ktwrfy ycy 
+    Fyyjsynts : alwnknjw vzj qj knhmnjw ycy htsynjssj gnjs ijx styjx ij rzxnvzjx 
+    Nq jxy nrutwyfsy ij alwnknjw hjx ijzc itssljx.*
+    
+    
+    
+    
+    
+    
+    
+        
+    
+    Les autres parties de la documentation sont cryptées (pour éviter une modification du code dans le futur)
+    Payer la sommme de 10 000 $ pour pouvoir voir la suite du fonctionnement de l'application dans le détail ...
+    ---------------------------------------------------------------------------
