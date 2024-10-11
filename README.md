@@ -1,5 +1,3 @@
-projetmethagiles
-
 Documentation utilisateurs
 
 ---------------------------------------------------------------------------
@@ -28,6 +26,7 @@ Récupération du dossier contenant l'application (étape 2)
 ---------------------------------------------------------------------------
 Fonctionnement général de l'application
 
+    Sautez les étapes 1 et 2 si Python est installé sur votre ordinateur.
     Ouvrez le dossier nommé "projetmethagiles".
     Sélectionnez le fichier main.py.
     Exécutez le fichier.
@@ -46,7 +45,7 @@ Fonctionnement général de l'application
 
 ---------------------------------------------------------------------------
 
-Fonctionnement détaillé de l'application
+Fonctionnement détaillé de l'application (Partie 1)
 
     Référez-vous d'abord au fonctionnement général de l'application.
     Importation d'un fichier :
@@ -60,3 +59,16 @@ Fonctionnement détaillé de l'application
     Payer la sommme de 10 000 $ pour pouvoir voir la suite du fonctionnement de l'application dans le détail ...
 
 ---------------------------------------------------------------------------
+
+Hqpevkqppgogpv fivcknni fg n'crrnkecvkqp (Rctvkg 2)
+
+Tihitgb-xqwu f'cdqtf cw hqpevkqppgogpv iipitcn fg n'crrnkecvkqp.
+Korqtvcvkqp f'wp hkejkgt :
+Uingevkqppgb wp dqwvqp tcfkq.
+Ejqkukuugb rctok ngu 3 vgorqu rtqrquiu ng tavjog swg xqwu uqwjckvgb : Ngpv/Pqtocn/Tcrkfg.
+Korqtvgb ng hkejkgt fg xqvtg ejqkz.
+Cvvgpvkqp : xitkhkgt swg ng hkejkgt uqkv cw hqtocv vzv
+Cvvgpvkqp : xitkhkgt swg ng hkejkgt vzv eqpvkgppg dkgp fgu pqvgu fg owukswgu
+Kn guv korqtvcpv fg xitkhkgt egu fgwz fqppigu.
+
+Rcagt nc uqooog fg 10 000 $ rqwt rqwxqkt xqkt nc uwkvg fw hqpevkqppgogpv fg n'crrnkecvkqp fcpu ng fivckn ...
