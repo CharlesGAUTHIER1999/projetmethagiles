@@ -1,8 +1,8 @@
 Documentation utilisateurs
-
+ 
 ---------------------------------------------------------------------------
 Téléchargement de Python (étape 1)
-
+ 
     Rendez-vous sur le site https://www.python.org/downloads/windows/.
     Allez dans la section "Stable Releases".
     Choisissez la version la plus récente de Python (3.1X.X).
@@ -14,18 +14,18 @@ Téléchargement de Python (étape 1)
     Un terminal de commandes apparaîtra.
     Tapez "python" dans le terminal.
     Une version de Python devrait s'afficher.
-
+ 
 ---------------------------------------------------------------------------
 Récupération du dossier contenant l'application (étape 2)
-
+ 
     Rendez-vous sur la page suivante : https://github.com/CharlesGAUTHIER1999/projetmethagiles.
     Cliquez sur le bouton vert "CODE".
     Téléchargez le dossier "projetmethagiles" (format zip).
     Extrayez les fichiers du dossier "projetmethagiles" sur votre bureau.
-
+ 
 ---------------------------------------------------------------------------
 Fonctionnement général de l'application
-
+ 
     Sautez les étapes 1 et 2 si Python est installé sur votre ordinateur.
     Ouvrez le dossier nommé "projetmethagiles".
     Sélectionnez le fichier main.py.
@@ -34,7 +34,7 @@ Fonctionnement général de l'application
     Si la fenêtre ne s'affiche pas, revoyez les étapes précédentes (S1, S2).
     But de l'application : jouer de la musique selon l'instrument préféré des Français (le piano).
     Vous avez 3 choix possibles dans cette application :
-    
+   
     Jouer une musique avec un clavier virtuel
     => Les touches de votre clavier (sélectionnées) s'afficheront avec une lumière sur le clavier virtuel.
     Importer un fichier qui jouera une séquence par défaut
@@ -42,11 +42,11 @@ Fonctionnement général de l'application
     Jouer une musique de manière aléatoire
     => La musique d'introduction de Mario ou de Pirates des Caraïbes sera jouée.
     Pour chaque option, vous pouvez choisir le rythme de votre choix (Lent, Normal, Rapide ou Aléatoire).
-
+ 
 ---------------------------------------------------------------------------
-
+ 
 Fonctionnement détaillé de l'application (Partie 1)
-
+ 
     Référez-vous d'abord au fonctionnement général de l'application.
     Importation d'un fichier :
     Sélectionnez un bouton radio.
@@ -55,40 +55,3 @@ Fonctionnement détaillé de l'application (Partie 1)
     Attention : vérifier que le fichier soit au format txt
     Attention : vérifier que le fichier txt contienne bien des notes de musiques
     Il est important de vérifier ces deux données.
-
----------------------------------------------------------------------------
-
-Hqpevkqppgogpv fivcknni fg n'crrnkecvkqp (Rctvkg 2)
-
-    Tihitgb-xqwu f'cdqtf cw hqpevkqppgogpv iipitcn fg n'crrnkecvkqp.
-    Korqtvcvkqp f'wp hkejkgt :
-    Uingevkqppgb wp dqwvqp tcfkq.
-    Ejqkukuugb rctok ngu 3 vgorqu rtqrquiu ng tavjog swg xqwu uqwjckvgb : Ngpv/Pqtocn/Tcrkfg.
-    Korqtvgb ng hkejkgt fg xqvtg ejqkz.
-    Cvvgpvkqp : xitkhkgt swg ng hkejkgt uqkv cw hqtocv vzv
-    Cvvgpvkqp : xitkhkgt swg ng hkejkgt vzv eqpvkgppg dkgp fgu pqvgu fg owukswgu
-    Kn guv korqtvcpv fg xitkhkgt egu fgwz fqppigu.
-    
-    Vkjkvid-zsyw h'efsvh ey jsrgxmsrriqirx kkrkvep hi p'ettpmgexmsr. 
-    Mqtsvxexmsr h'yr jmglmiv : 
-    Wkpigxmsrrid yr fsyxsr vehms. 
-    Glsmwmwwid tevqm piw 3 xiqtsw tvstswkw pi vcxlqi uyi zsyw wsylemxid : Pirx/Rsvqep/Vetmhi. 
-    Mqtsvxid pi jmglmiv hi zsxvi glsmb. 
-    Exxirxmsr : zkvmjmiv uyi pi jmglmiv wsmx ey jsvqex xbx 
-    Exxirxmsr : zkvmjmiv uyi pi jmglmiv xbx gsrxmirri fmir hiw rsxiw hi qywmuyiw 
-    Mp iwx mqtsvxerx hi zkvmjmiv giw hiyb hsrrkiw.
-    
-    Wlklwje-atzx i'fgtwi fz ktshyntssjrjsy llslwfq ij q'fuuqnhfynts. 
-    Nrutwyfynts i'zs knhmnjw : 
-    Xlqjhyntssje zs gtzyts wfint. 
-    Hmtnxnxxje ufwrn qjx 3 yjrutx uwtutxlx qj wdymrj vzj atzx xtzmfnyje : Qjsy/Stwrfq/Wfunij. 
-    Nrutwyje qj knhmnjw ij atywj hmtnc. 
-    Fyyjsynts : alwnknjw vzj qj knhmnjw xtny fz ktwrfy ycy 
-    Fyyjsynts : alwnknjw vzj qj knhmnjw ycy htsynjssj gnjs ijx styjx ij rzxnvzjx 
-    Nq jxy nrutwyfsy ij alwnknjw hjx ijzc itssljx.
-        
-    
-    Les autres parties de la documentation sont cryptées (pour éviter une modification du code dans le futur)
-    Payer la sommme de 10 000 $ pour pouvoir voir la suite du fonctionnement de l'application dans le détail ...
-
----------------------------------------------------------------------------    
