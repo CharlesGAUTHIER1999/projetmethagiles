@@ -1,1 +1,29 @@
+# Environnement virtuel
+venv/
+env/
+
+# Fichiers de configuration des IDE
+.idea/
+.vscode/
+
+# Fichiers Python compilés
 __pycache__/
+*.py[cod]
+*.pyo
+
+# Dépendances
+*.egg-info/
+*.eggs/
+*.egg
+dist/
+build/
+
+# Logs
+*.log
+
+# Fichiers temporaires
+*.tmp
+*.swp
+
+# MacOS
+.DS_Store

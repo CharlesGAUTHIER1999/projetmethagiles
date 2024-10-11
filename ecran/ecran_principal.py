@@ -8,9 +8,7 @@ import tkinter as tk
 
 from MusicPlayer_Base import MusicPlayer as mp
 
-
 from note_frequence_base import note_to_frequency
-
 
 import numpy as np
 import pygame
