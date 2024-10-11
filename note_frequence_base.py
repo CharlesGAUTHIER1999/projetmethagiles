@@ -102,4 +102,3 @@ note_to_frequency_noires = {
     "F#5": 740,  # or "Gb5": 740
     "G#5": 831,  # or "Ab5": 831
     "A#5": 932,  # or "Bb5": 932
-}
