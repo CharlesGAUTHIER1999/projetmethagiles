@@ -6,9 +6,7 @@ import threading
 from tkinter import filedialog
 import tkinter as tk
 
-
 from note_frequence_base import note_to_frequency
-
 
 import numpy as np
 import pygame
@@ -31,8 +29,10 @@ class EcranPrincipal(Ecran):
         self.fenetre_principale = None
         self.gestionnaire_etat_ecran = gestionnaire_etat_ecran
         self.graphique = graphique
-        self.is_playing = False  # Indique si une séquence est en cours
-        self.stop_requested = False  # Indique si l'arrêt a été demandé
+        self.is_playing = False
+        # Indique si l'arrêt a été demandé
+        self.stop_requested = False
+        self.touches_piano = {}
         self.current_sound = None
 
         pygame.mixer.init(frequency=44100, size=-16, channels=2)
@@ -105,7 +105,7 @@ class EcranPrincipal(Ecran):
                 if note == "Unknown":
                     continue
 
-                if note == "0":  # Silence
+                if note == "0":
                     pygame.time.delay(int(duration * 1000))
                     continue
 
@@ -135,8 +135,11 @@ class EcranPrincipal(Ecran):
         if self.current_sound:
             self.current_sound.stop()
             self.current_sound = None
-        self.stop_requested = True  # Demande d'arrêt de la séquence
-        self.is_playing = False  # Réinitialiser l'état de lecture
+        # Demande d'arrêt de la séquence
+        self.stop_requested = True
+
+        # Réinitialiser l'état de lecture
+        self.is_playing = False
 
     def initialiser_interface(self):
         """
@@ -170,21 +173,21 @@ class EcranPrincipal(Ecran):
         frame_high.pack(fill="both", expand=True)
 
         frame_aside = self.graphique.creer_frame(self.root_frame, bg="#FF0000")
-        self.bouton1 = self.graphique.creer_button(frame=frame_aside, fonction= self.on_key_press, label="I1")
+        self.bouton1 = self.graphique.creer_button(frame=frame_aside, fonction=None, label="I1")
         self.bouton1.pack(padx=5, pady=5, side="left")
-        self.bouton2 = self.graphique.creer_button(frame=frame_aside, fonction= self.on_key_press, label="I2")
+        self.bouton2 = self.graphique.creer_button(frame=frame_aside, fonction=None, label="I2")
         self.bouton2.pack(padx=5, pady=5, side="left") 
-        self.bouton3 = self.graphique.creer_button(frame=frame_aside, fonction= self.on_key_press, label="I3")
+        self.bouton3 = self.graphique.creer_button(frame=frame_aside, fonction=None, label="I3")
         self.bouton3.pack(padx=5, pady=5, side="left")
-        self.bouton4 = self.graphique.creer_button(frame=frame_aside, fonction= self.on_key_press, label="I4")
+        self.bouton4 = self.graphique.creer_button(frame=frame_aside, fonction=None, label="I4")
         self.bouton4.pack(padx=5, pady=5, side="left")
-        self.bouton5 = self.graphique.creer_button(frame=frame_aside, fonction= self.on_key_press, label="I5")
+        self.bouton5 = self.graphique.creer_button(frame=frame_aside, fonction=None, label="I5")
         self.bouton5.pack(padx=5, pady=5, side="left")
-        self.bouton6 = self.graphique.creer_button(frame=frame_aside, fonction= self.on_key_press, label="I6")
+        self.bouton6 = self.graphique.creer_button(frame=frame_aside, fonction=None, label="I6")
         self.bouton6.pack(padx=5, pady=5, side="left")
-        self.bouton7 = self.graphique.creer_button(frame=frame_aside, fonction= self.on_key_press, label="I7")
+        self.bouton7 = self.graphique.creer_button(frame=frame_aside, fonction=None, label="I7")
         self.bouton7.pack(padx=5, pady=5, side="left")
-        self.bouton8 = self.graphique.creer_button(frame=frame_aside, fonction= self.on_key_press, label="I8")
+        self.bouton8 = self.graphique.creer_button(frame=frame_aside, fonction=None, label="I8")
         self.bouton8.pack(padx=5, pady=5, side="left")
         frame_aside.pack(fill="both", expand=True)
 
@@ -199,6 +202,7 @@ class EcranPrincipal(Ecran):
         self.fenetre_principale.bind("<Key>", self.on_key_press)
 
     def import_file(self):
+        """Methode qui charge le fichier et qui joue les notes qui sont dedans"""
 
         file_path = filedialog.askopenfilename(filetypes=[("Fichiers texte", "*.txt"), ("Tous les fichiers", "*.*")])
         if file_path:
@@ -214,6 +218,27 @@ class EcranPrincipal(Ecran):
             with open(file_path, 'r') as file:
                 lines = file.readlines()
 
+            if not lines:
+                self.message_label.config(text="Le fichier est vide. Veuillez fournir un fichier valide.")
+                return
+
+            for line_number, line in enumerate(lines, start=1):
+                parts = line.strip().split()
+                if len(parts) != 2:
+                    self.message_label.config(text=f"Erreur de format à la ligne {line_number} : {line.strip()}")
+                    return
+                note, duration = parts
+
+                try:
+                    duration = float(duration)
+                except ValueError:
+                    self.message_label.config(text=f"Durée invalide à la ligne {line_number} : {duration}")
+                    return
+
+                if note != "0" and note != "Unknown" and not note.isalnum():
+                    self.message_label.config(text=f"Note invalide à la ligne {line_number} : {note}")
+                    return
+
             self.message_label.config(text=f"Fichier {file_path} importé avec succès")
 
             # Jouer la séquence de musique après l'importation
@@ -223,14 +248,20 @@ class EcranPrincipal(Ecran):
             self.message_label.config(text=f"Erreur lors de l'importation du fichier : {e}")
 
     def on_key_press(self, event):
-        """Callback pour jouer une note quand une touche du clavier est pressée."""
+        """Callback pour jouer une note quand une touche du clavier est pressée et changer la couleur de la touche."""
         note = self.notes_clavier.get(event.char, None)
+
         if note:
             frequency = note_to_frequency.get(note, None)
             if frequency:
+                self.play(frequency, 0.125)
 
-                self.play(frequency, 0.125)  # Joue la note pendant 1 seconde
-            
+                touche_id = self.clavier.touches[event.char]
+                self.canvas.itemconfig(touche_id, fill="yellow")
+
+                # Remettre la couleur d'origine après un délai
+                self.fenetre_principale.after(150, lambda: self.canvas.itemconfig(touche_id, fill="white"))
+
     def afficher(self):
         """
         Affiche la fenêtre principale.
