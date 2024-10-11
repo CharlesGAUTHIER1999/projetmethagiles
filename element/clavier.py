@@ -10,6 +10,9 @@ class Clavier:
         self.canvas = canvas
         self.type = type
 
+        # Dictionnaire pour stocker les touches
+        self.touches = {}
+        self.list_touches = ['a', 'z', 'e', 'r', 't', 'y', 'u', 'v', 'b', 'n', ',', ';', ':', '!']
         self.create_clavier_piano(largeur, hauteur, top_margin, left_margin, taille_bouton)
 
     def create_clavier_piano(self, largeur: int, hauteur: int, top_margin: int, left_margin: int, nb_touches: int) -> None:
@@ -27,9 +30,13 @@ class Clavier:
             y2 = y1 + hauteur_touche_blanche
 
             # Dessin des touches blanches
-            self.canvas.create_rectangle(x1, y1, x2, y2, fill="white", outline="black", tags="touche_blanche")
-            self.canvas.create_text((x1 + x2) // 2, (y1 + y2) // 2, font=("Helvetica", 10))
+            touche_blanche = self.canvas.create_rectangle(x1, y1, x2, y2, fill="white", outline="black",
+                                                          tags="touche_blanche")
+            # self.canvas.create_text((x1 + x2) // 2, (y1 + y2) // 2, text=str(self.list_touches[i]),
+            #                         font=("Helvetica", 10))
 
+            # On va stocker les id des rectangles(claviers)
+            self.touches[self.list_touches[i]] = touche_blanche
             # Création des touches noires (2e, 4e, 6e, 9e, et 11e sur 12 touches)
             if i % 7 in [0, 1, 3, 4, 5]:  # Ces indices correspondent aux positions où il y a une touche noire
                 x1_noir = x1 + largeur_touche_blanche * 0.75  # Position décalée vers la droite
@@ -38,5 +45,7 @@ class Clavier:
                 y2_noir = y1_noir + hauteur_touche_noire
 
                 # Dessin des touches noires
-                self.canvas.create_rectangle(x1_noir, y1_noir, x2_noir, y2_noir, fill="black", outline="black",
-                                             tags="touche_noire")
+                touche_noire = self.canvas.create_rectangle(x1_noir, y1_noir, x2_noir, y2_noir, fill="black",
+                                                            outline="black", tags="touche_noire")
+
+                # self.touches[self.list_touches[i]] = touche_noire
