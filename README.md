@@ -85,16 +85,10 @@ Hqpevkqppgogpv fivcknni fg n'crrnkecvkqp (Rctvkg 2)
     Nrutwyje qj knhmnjw ij atywj hmtnc. 
     Fyyjsynts : alwnknjw vzj qj knhmnjw xtny fz ktwrfy ycy 
     Fyyjsynts : alwnknjw vzj qj knhmnjw ycy htsynjssj gnjs ijx styjx ij rzxnvzjx 
-    Nq jxy nrutwyfsy ij alwnknjw hjx ijzc itssljx.*
-    
-    
-    
-    
-    
-    
-    
+    Nq jxy nrutwyfsy ij alwnknjw hjx ijzc itssljx.
         
     
     Les autres parties de la documentation sont cryptées (pour éviter une modification du code dans le futur)
     Payer la sommme de 10 000 $ pour pouvoir voir la suite du fonctionnement de l'application dans le détail ...
-    ---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------    
