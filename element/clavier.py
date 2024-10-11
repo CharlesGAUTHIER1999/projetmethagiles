@@ -37,7 +37,9 @@ class Clavier:
             touche_blanche = self.canvas.create_rectangle(x1, y1, x2, y2, fill="white", outline="black")
             self.touches[key] = touche_blanche  # Associe la touche blanche à son ID
 
-            # Création des touches noires (aux bons endroits seulement)
+            self.canvas.create_text((x1 + x2) // 2, (y1 + y2) // 2, text=key, font=("Helvetica", 10))
+
+        # Création des touches noires (aux bons endroits seulement)
             if i % 7 in [0, 1, 3, 4, 5]:  # Ces indices correspondent aux positions où il y a une touche noire
                 x1_noir = x1 + largeur_touche_blanche * 0.75  # Position décalée vers la droite
                 y1_noir = top_margin
@@ -47,7 +49,7 @@ class Clavier:
                 touche_noire = self.canvas.create_rectangle(x1_noir, y1_noir, x2_noir, y2_noir, fill="black",
                                                             outline="black", tags="touche_noire")
 
-                # Associer la touche noire à une lettre
+            # Associer la touche noire à une lettre
                 if noire_index < len(self.list_touches_noire):
                     touche_clavier_noire = self.list_touches_noire[noire_index]
                     self.touches[touche_clavier_noire] = touche_noire
