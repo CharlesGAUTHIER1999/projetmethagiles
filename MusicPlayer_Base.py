@@ -87,8 +87,9 @@ class MusicPlayer:
 
     # génère une suite de notes aléatoires
     def generate_random_sequence(self, num_notes, filename, tempo):
+
+        print("tempo_gen", tempo)
         notes = list(note_to_frequency_noires.keys())
-        print(notes)
         notes.append("0")
 
         precedente_note_true = False
@@ -104,14 +105,18 @@ class MusicPlayer:
                     precedente_note_true = True
                 else:
                     precedente_note_true = False
-
-                if tempo == 60:
+                print("temp0o", tempo)
+                if tempo == "60":
+                    print("tempo 60")
                     duration = 1
-                elif tempo == 90:
+                elif tempo == "90":
+                    print("tempo 90")
                     duration = 0.5
-                elif tempo == 120:
+                elif tempo == "120":
+                    print("tempo 120")
                     duration = 0.25
                 else:
+                    print("tempo aleatoire")
                     duration = np.random.uniform(0.25, 1)
                 # duration = np.random.uniform(0.1, 0.5)
                 f.write(f"{note} {duration}\n")

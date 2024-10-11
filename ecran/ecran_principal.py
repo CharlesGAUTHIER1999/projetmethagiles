@@ -21,6 +21,9 @@ class EcranPrincipal(Ecran):
         self.stop_requested = False  # Indique si l'arrêt a été demandé
         self.current_sound = None
 
+        self.fonctionRand = None
+        self.fonctionRand2 = None
+
         pygame.mixer.init(frequency=sample_rate, size=-16, channels=2)
         self.sample_rate = sample_rate
 
@@ -41,6 +44,7 @@ class EcranPrincipal(Ecran):
         pygame.time.delay(int(duration * 1000))
 
     def play_sequence(self, filename, tempo):
+        print("tempo1", tempo)
         if self.is_playing:
             return  # Empêcher de relancer une lecture si une séquence est en cours
         self.is_playing = True
@@ -48,6 +52,17 @@ class EcranPrincipal(Ecran):
         threading.Thread(target=self._play_sequence_thread, args=(filename, tempo)).start()
 
     def _play_sequence_thread(self, filename, tempo):
+        print("tempo2", tempo)
+
+        if tempo == "60":
+            print("tempo 60")
+            tempo = 2
+        elif tempo == "90":
+            print("tempo 90")
+            tempo = 1
+        elif tempo == "120":
+            print("tempo 120")
+            tempo = 0.5
         try:
             notes_sequence, duration_sequence = [], []
             with open(filename, "r") as f:
@@ -60,12 +75,12 @@ class EcranPrincipal(Ecran):
                 if self.stop_requested:
                     break
                 if note == "0":  
-                    pygame.time.delay(int(duration * 1000 * tempo))
+                    pygame.time.delay(int(duration * 1000 * float(tempo)))
                     continue
 
                 frequency = note_to_frequency.get(note, None)
                 if frequency:
-                    self.play(frequency, duration * tempo)
+                    self.play(frequency, duration * float(tempo))
         finally:
             self.is_playing = False  
 
@@ -110,22 +125,36 @@ class EcranPrincipal(Ecran):
         self.message_label = tk.Label(self.root_frame, text="", fg="red")
         self.message_label.pack(padx=10, pady=10)
 
+        def update_fonctionRand2(fonction):
+            self.fonctionRand2 = fonction
+            print("fonctionRand", self.fonctionRand2)
+
         # Boutons gauche
         self.bouton = self.graphique.creer_button(frame=frame_high_left, fonction=self.import_file, label="Importation d'un fichier")
         self.bouton.pack(padx=5, pady=5, side="left")
-        self.bouton3 = self.graphique.creer_button(frame=frame_high_left, fonction=lambda: self.play_sequence("pirate.txt", 1), label="RUN MUSIC")
+        self.bouton3 = self.graphique.creer_button(frame=frame_high_left, fonction=lambda: self.play_sequence("pirate.txt", self.fonctionRand2), label="RUN MUSIC")
         self.bouton3.pack(padx=5, pady=5, side="left")
         self.bouton4 = self.graphique.creer_button(frame=frame_high_left, fonction=lambda: self.stop_music(), label="STOP MUSIC")
         self.bouton4.pack(padx=5, pady=5, side="left")
 
+        choix2  = tk.StringVar()
+        choix2.set(60)  # Valeur par défaut
 
-        fonctionRand = None
+        self.boutonRadio5 = self.graphique.creer_radiobutton(frame=frame_high_left, variable=choix2, value=60, label="Lent", command=lambda: update_fonctionRand2(choix2.get()))
+        self.boutonRadio5.pack(padx=5, pady=5, side="left")
+        self.boutonRadio6 = self.graphique.creer_radiobutton(frame=frame_high_left, variable=choix2, value=90, label="Normal", command=lambda: update_fonctionRand2(choix2.get()))
+        self.boutonRadio6.pack(padx=5, pady=5, side="left")
+        self.boutonRadio7 = self.graphique.creer_radiobutton(frame=frame_high_left, variable=choix2, value=120, label="Rapide", command=lambda: update_fonctionRand2(choix2.get()))
+        self.boutonRadio7.pack(padx=5, pady=5, side="left")
+
+
+        
 
         def update_fonctionRand(fonction):
-            fonctionRand = fonction
-            print("fonctionRand", fonctionRand)
+            self.fonctionRand = fonction
+            print("fonctionRand", self.fonctionRand)
         # Boutons droite
-        self.bouton2 = self.graphique.creer_button(frame=frame_high_right, fonction=lambda: self.read_random_sequence(fonctionRand), label="Lecture Séquence Aléatoire")
+        self.bouton2 = self.graphique.creer_button(frame=frame_high_right, fonction=lambda: self.read_random_sequence(self.fonctionRand), label="Lecture Séquence Aléatoire")
         self.bouton2.pack(padx=5, pady=5, side="left")
         
         # ajouter 4 radios dans le frame_high_right
