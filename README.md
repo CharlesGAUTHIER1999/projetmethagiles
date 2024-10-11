@@ -1,8 +1,6 @@
 projetmethagiles
 
 Documentation utilisateurs
-Python installé : sautez les étapes 1 et 2
-Python non installé : suivez les étapes 1 et 2
 
 ---------------------------------------------------------------------------
 Téléchargement de Python (étape 1)
