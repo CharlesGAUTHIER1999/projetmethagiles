@@ -1,5 +1,6 @@
 from librairie.graphique.graphique_interface import GraphiqueInterface
 from ecran.ecran import Ecran
+# from ecran.dialog import Dialog
 from element.clavier import Clavier
 from ecran.getsionnaire_etat_ecran import GestionnaireEtatEcran
 import threading
@@ -11,6 +12,8 @@ from note_frequence_base import note_to_frequency
 import numpy as np
 import pygame
 from MusicPlayer_Base import MusicPlayer as mp
+import re
+
 
 class EcranPrincipal(Ecran):
     def __init__(self, graphique: GraphiqueInterface, gestionnaire_etat_ecran: GestionnaireEtatEcran, sample_rate=44100):
@@ -84,7 +87,7 @@ class EcranPrincipal(Ecran):
         # Lancer la lecture dans un thread séparé pour éviter le blocage de l'interface
         self.is_playing = True
         self.stop_requested = False  # Réinitialise la demande d'arrêt
-        threading.Thread(target=self._play_sequence_thread, args=(filename,tempo)).start()
+        threading.Thread(target=self._play_sequence_thread, args=(filename, tempo)).start()
 
     def _play_sequence_thread(self, filename, tempo):
         try:
@@ -204,7 +207,7 @@ class EcranPrincipal(Ecran):
 
         # On crée l'instance du piano
         self.clavier = Clavier(graphique=self.graphique, fenetre=frame_middle, canvas=self.canvas, largeur=50,
-                               hauteur=150, top_margin=40, type='', left_margin=350, taille_bouton=14)
+                               hauteur=150, top_margin=40, type='', left_margin=350)
 
         # Pour afficher le piano
         frame_middle.pack(side='top', fill="x", expand=True)
@@ -225,20 +228,23 @@ class EcranPrincipal(Ecran):
 
     def read_random_sequence(self):
         # Générer une séquence aléatoire de 10 notes
-        mp.generate_random_sequence(self,25, "test.txt", 1)
+        mp.generate_random_sequence(self, 25, "test.txt", 1)
         self.play_sequence("test.txt", 1)
-        
 
     def load_music_file(self, file_path):
 
+        self.message_label.config(text="")
         try:
             with open(file_path, 'r') as file:
                 lines = file.readlines()
 
+            # Vérifier si le fichier est vide
             if not lines:
                 self.message_label.config(text="Le fichier est vide. Veuillez fournir un fichier valide.")
                 return
 
+            # Vérification du format du fichier
+            note_pattern = re.compile(r"^[A-Ga-g](#|b)?\d$")  # Regex pour vérifier les notes valides
             for line_number, line in enumerate(lines, start=1):
                 parts = line.strip().split()
                 if len(parts) != 2:
@@ -246,26 +252,70 @@ class EcranPrincipal(Ecran):
                     return
                 note, duration = parts
 
+                # Vérifier que la durée est un nombre valide
                 try:
                     duration = float(duration)
                 except ValueError:
                     self.message_label.config(text=f"Durée invalide à la ligne {line_number} : {duration}")
                     return
 
-                if note != "0" and note != "Unknown" and not note.isalnum():
+                # Vérifier que la note est valide : accepte les notes avec dièse (ex. A#6, C#4)
+                if note != "0" and note != "Unknown" and not note_pattern.match(note):
                     self.message_label.config(text=f"Note invalide à la ligne {line_number} : {note}")
                     return
 
+            # Si toutes les vérifications passent, le fichier est considéré valide
             self.message_label.config(text=f"Fichier {file_path} importé avec succès")
-
-            # Jouer la séquence de musique après l'importation
-            self.play_sequence(file_path, 1)
 
         except Exception as e:
             self.message_label.config(text=f"Erreur lors de l'importation du fichier : {e}")
 
+        # message = f"Choisissez la vitesse : \n la vitesse doit être comprise entre 0.5 à 3."
+        #
+        # title = "Choix de la vitesse"
+        #
+        # # On ouvre une dialog qui permet la saisie pour demander la vitesse qu'il veut utiliser pour jouer
+        # dialog = Dialog(self.graphique, self.fenetre_principale, title, message, afficher_saisi=True)
+        #
+        # # On attend que la fenêtre se ferme
+        # self.fenetre_principale.wait_window(dialog.get_fenetre())
+        #
+        # # On récupère la saisie
+        # vitesse_saisie = dialog.get_saisis()
+        #
+        # if vitesse_saisie:
+        #     vitesse_saisie = int(vitesse_saisie)
+        #     if 0.5 > vitesse_saisie > 3:
+        #         print("Veuillez choisir un nombre compris entre 0.5 et 3")
+        #         self.action_avancer()
+        #         return
+
+        # Jouer la séquence de musique après l'importation
+        self.play_sequence(file_path, 1)
+
+    def action_avancer(self):
+        message = f"Choisissez la vitesse : \n la vitesse doit être comprise entre 0.5 à 3."
+
+        title = "Choix de la vitesse"
+
+        # On ouvre une dialog qui permet la saisie pour demander la vitesse qu'il veut utiliser pour jouer
+        dialog = Dialog(self.graphique, self.fenetre_principale, title, message, afficher_saisi=True)
+
+        # On attend que la fenêtre se ferme
+        self.fenetre_principale.wait_window(dialog.get_fenetre())
+
+        # On récupère la saisie
+        vitesse_saisie = dialog.get_saisis()
+
+        if vitesse_saisie:
+            vitesse_saisie = int(vitesse_saisie)
+            if vitesse_saisie < 0.5:
+                print("Veuillez choisir un nombre compris entre 0.5 et 3")
+                self.action_avancer()
+                return
+
+
     def on_key_press(self, event):
-        """Callback pour jouer une note quand une touche du clavier est pressée et changer la couleur de la touche."""
         note = self.notes_clavier.get(event.char, None)
 
         if note:
@@ -273,11 +323,19 @@ class EcranPrincipal(Ecran):
             if frequency:
                 self.play(frequency, 0.125)
 
-                touche_id = self.clavier.touches[event.char]
-                self.canvas.itemconfig(touche_id, fill="yellow")
+                # On récupère l'id de la touche(lettre entrée)
+                touche_id = self.clavier.touches.get(event.char, None)
+                if touche_id:
+                    # On récupère la couleur du bg de la touche entrée
+                    current_fill = self.canvas.itemcget(touche_id, 'fill')
 
-                # Remettre la couleur d'origine après un délai
-                self.fenetre_principale.after(150, lambda: self.canvas.itemconfig(touche_id, fill="white"))
+                    if current_fill == "white":
+                        self.canvas.itemconfig(touche_id, fill="yellow")
+                        self.fenetre_principale.after(150, lambda: self.canvas.itemconfig(touche_id, fill="white"))
+
+                    elif current_fill == "black":
+                        self.canvas.itemconfig(touche_id, fill="orange")
+                        self.fenetre_principale.after(150, lambda: self.canvas.itemconfig(touche_id, fill="black"))
 
     def afficher(self):
         """
