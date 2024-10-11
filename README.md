@@ -2,27 +2,39 @@
 
 **************************************************
 Documentation utilisateurs
-Lire la documentation ci-dessous pour bien comprendre comment l'application fonctionne
 
 **************************************************
-Partie A : télécharger le fichier
-    Se rendre sur le navigateur web
-    Se rendre à l'emplacement où se trouve le programme (site spécialisé, compte email, ou autre)
-    Télécharger le fichier x.py sur votre ordinateur (vérifier que le nom du programme téléchargé soit le bon)
-    Enregistrer le fichier téléchargé sur votre bureau (endroit où vous pouvez le trouver facilement)
-    Une fois qu'il est enregistré, faites un clic droit sur le fichier
-    Sélectionner le mot 'Exécuter'
-    Une fenêtre avec l'interface de l'application doit s'ouvrir.
-    Si la fenêtre ne s'ouvre pas, recommencer les étapes précédentes
+Téléchargement de Python
+
+    Se rendre sur le site https://www.python.org/downloads/windows/
+    Se rendre dans la partie "Stables Releases"
+    Choisir la version la plus récente de Python (3.1X.X)
+    Prendre l'installer correspondant à votre système d'exploitation (MAC/PC/Linux)
+    Télécharger l'installer et l'exécuter quand le téléchargement est fini
+    Suivre les étapes indiquées par l'installer
+    Se rendre ensuite sur le terminal de commande lié à votre système d'exploitation
+    Taper dans l'environnement la commande python
+    Vous devez obligatoirement avoir une version de Python qui s'affiche dans l'invite de commandes
 
 **************************************************
-Partie B : fonctionnement général de l'application
-Le but de cette application est de jouer de la musique selon votre instrument préféré.
-Pour cela, vous allez choisir votre instrument préféré parmi une liste qui va s'afficher.
-Une fois que vous avez sélectionné votre instrument préféré, vous allez pouvoir jouer de la musique ou l'écouter.
-Vous avez la possibilité d'importer des fichiers (uniquement au format texte donc txt).
-Ces fichiers doivent contenir des notes de musiques jouées aléatoirement.
-Vous allez également pouvoir choisir le rythme que vous souhaitez, même pour un fichier avec de la musique pré-jouée.
+Récupération du dossier contenant l'application
+
+    Se rendre sur la page web suivante : https://github.com/CharlesGAUTHIER1999/projetmethagiles
+    Se rendre dans la partie verte appelée "CODE"
+    Récupérer le dossier projetmethagiles en le téléchargeant (format zip)
+    Extraire les fichiers du dossier projetmethagiles sur votre bureau
+    Exécuter le fichier main.py (application générale)
+
+**************************************************
+Fonctionnement général de l'application
+
+    But : jouer de la musique selon votre instrument préféré (le piano)
+    Vous allez pouvoir jouer du piano via un piano virtuel ou importer un fichier qui jouera une séquence aléatoire.
+    Vous avez la possibilité de choisir le rythme de la mlusique que vouys écoutez (1, 2, 3).
+    
+**************************************************
+
+Fonctionnement détaillé
 
 
 
@@ -38,33 +50,24 @@ Vous allez également pouvoir choisir le rythme que vous souhaitez, même pour u
 
 
 
+    Vous avez la possibilité d'importer des fichiers (uniquement au format texte donc txt).
+    Ces fichiers doivent contenir des notes de musiques jouées aléatoirement.
+    Vous allez également pouvoir choisir le rythme que vous souhaitez, même pour un fichier avec de la musique pré-jouée.
+    Quel est le but de l'application ?
+    Jouer de la musique
+    Plusieurs choix s'offrent à vous : 
+    1 : jouer des séquences aléatoires
+    2 : jouer vous-même de la musique (en utilisant votre clavier)
+    3 : sélectionner un fichier sur votre ordinateur avec des musiques jouées aléatoirement
+    Importation d'un fichier
+    Lecture de Séquence Aléatoire
+    RUN / Stop Music
+    Option 1/2/3/aleatoire (rythme)
+    Boutons d'images (avec différents instruments)
+    Clavier virtuel de piano (avec lumière si touche du clavier appuyé)
+    3 rythems possibles : lent / rapide / normal
+    Rythmes : joués avec digfférents vitesses (même principe que sur Youtuve et la lecture de vidéos)
+    Si vous choisissez l'option n°1 :
+    Vous avez alors choisi la séquence aléatoire
 
-
-
-Quel est le but de l'application ?
-Jouer de la musique
-
-Plusieurs choix s'offrent à vous : 
-1 : jouer des séquences aléatoires
-2 : jouer vous-même de la musique (en utilisant votre clavier)
-3 : sélectionner un fichier sur votre ordinateur avec des musiques jouées aléatoirement
-
-Importation d'un fichier
-Lecture de Séquence Aléatoire
-RUN / Stop Music
-Option 1/2/3/aleatoire (rythme)
-Boutons d'images (avec différents instruments)
-Clavier virtuel de piano (avec lumière si touche du clavier appuyé)
-3 rythems possibles : lent / rapide / normal
-Rythmes : joués avec digfférents vitesses (même principe que sur Youtuve et la lecture de vidéos)
-
-Si vous choisissez l'option n°1 :
-Vous avez alors choisi la séquence aléatoire
-
-
-
-
-
-
-
-
+**************************************************
