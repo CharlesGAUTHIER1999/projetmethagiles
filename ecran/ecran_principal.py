@@ -1,6 +1,5 @@
 from librairie.graphique.graphique_interface import GraphiqueInterface
 from ecran.ecran import Ecran
-# from ecran.dialog import Dialog
 from element.clavier import Clavier
 from ecran.getsionnaire_etat_ecran import GestionnaireEtatEcran
 import threading
@@ -168,23 +167,36 @@ class EcranPrincipal(Ecran):
         self.canvas = self.graphique.creer_canvas(frame_middle, bg="#fff")
         self.canvas.pack(fill="both", expand=True)
         
-        frame_high = self.graphique.creer_frame(self.root_frame, bg='#cecece')
+        self.frame_high = self.graphique.creer_frame(self.root_frame, bg='#cecece')
         self.message_label = tk.Label(self.root_frame, text="", fg="red")
         self.message_label.pack(padx=10, pady=10)
 
-        self.bouton = self.graphique.creer_button(frame=frame_high, fonction=self.import_file,
+        self.bouton = self.graphique.creer_button(frame=self.frame_high, fonction=self.import_file,
                                                   label="Importation d'un fichier")
         self.bouton.pack(padx=5, pady=5, side="left")
-        
-        self.bouton2 = self.graphique.creer_button(frame=frame_high, fonction=self.read_random_sequence,
-                                                  label="Lecture Séquence Aléatoire")
+
+        self.entre = tk.Entry(self.frame_high, width=30)
+        self.entre.pack(side="left", padx=5, pady=5)
+
+        # On met le focus sur le champ de saisi
+        self.entre.focus_set()
+
+        print(self.entre.get())
+
+        # Bouton Lecture Séquence Aléatoire
+        self.bouton2 = self.graphique.creer_button(
+            frame=self.frame_high,
+            fonction=self.read_random_sequence,
+            label="Lecture Séquence Aléatoire"
+        )
+
         self.bouton2.pack(padx=5, pady=5, side="left")
 
-        self.bouton3 = self.graphique.creer_button(frame=frame_high, fonction=lambda: self.play_sequence("pirate.txt", 1), label="RUN MUSIC")
+        self.bouton3 = self.graphique.creer_button(frame=self.frame_high, fonction=lambda: self.play_sequence("pirate.txt", 1), label="RUN MUSIC")
         self.bouton3.pack(padx=5, pady=5, side="left")
-        self.bouton4 = self.graphique.creer_button(frame=frame_high, fonction=lambda: self.stop_music(), label="STOP MUSIC")
+        self.bouton4 = self.graphique.creer_button(frame=self.frame_high, fonction=lambda: self.stop_music(), label="STOP MUSIC")
         self.bouton4.pack(padx=5, pady=5, side="left")       
-        frame_high.pack(fill="both", expand=True)
+        self.frame_high.pack(fill="both", expand=True)
 
         frame_aside = self.graphique.creer_frame(self.root_frame, bg="#FF0000")
         self.bouton1 = self.graphique.creer_button(frame=frame_aside, fonction=None, label="I1")
@@ -227,44 +239,56 @@ class EcranPrincipal(Ecran):
             self.load_music_file(file_path)
 
     def read_random_sequence(self):
-        # Générer une séquence aléatoire de 10 notes
-        mp.generate_random_sequence(self, 25, "test.txt", 1)
+        """
+        Fonction qui génère une séquence aléatoire et la joue en fonction du tempo saisi.
+        """
+        # Récupérer la valeur de `self.entre` ici
+        nb_de_notes_str = self.entre.get().strip()
+        if not nb_de_notes_str:
+            self.message_label.config(text="Veuillez entrer un tempo valide.")
+            return
+
+        try:
+            nb_de_notes = int(nb_de_notes_str)
+            if nb_de_notes <= 0:
+                self.message_label.config(text="Le tempo doit être un nombre positif.")
+                return
+        except ValueError:
+            self.message_label.config(text="Veuillez entrer un nombre valide pour le tempo.")
+            return
+
+        # Générer une séquence aléatoire de notes et jouer la séquence
+        print(f"Lecture de la séquence aléatoire avec un tempo de : {nb_de_notes}")
+        mp.generate_random_sequence(self, nb_de_notes * 2, "test.txt", 1)
         self.play_sequence("test.txt", 1)
 
     def load_music_file(self, file_path):
-
         self.message_label.config(text="")
         try:
             with open(file_path, 'r') as file:
                 lines = file.readlines()
 
-            # Vérifier si le fichier est vide
             if not lines:
                 self.message_label.config(text="Le fichier est vide. Veuillez fournir un fichier valide.")
                 return
 
-            # Vérification du format du fichier
-            note_pattern = re.compile(r"^[A-Ga-g](#|b)?\d$")  # Regex pour vérifier les notes valides
+            note_pattern = re.compile(r"^[A-Ga-g](#|b)?\d$")
             for line_number, line in enumerate(lines, start=1):
                 parts = line.strip().split()
                 if len(parts) != 2:
                     self.message_label.config(text=f"Erreur de format à la ligne {line_number} : {line.strip()}")
                     return
                 note, duration = parts
-
-                # Vérifier que la durée est un nombre valide
                 try:
                     duration = float(duration)
                 except ValueError:
                     self.message_label.config(text=f"Durée invalide à la ligne {line_number} : {duration}")
                     return
 
-                # Vérifier que la note est valide : accepte les notes avec dièse (ex. A#6, C#4)
                 if note != "0" and note != "Unknown" and not note_pattern.match(note):
                     self.message_label.config(text=f"Note invalide à la ligne {line_number} : {note}")
                     return
 
-            # Si toutes les vérifications passent, le fichier est considéré valide
             self.message_label.config(text=f"Fichier {file_path} importé avec succès")
 
         except Exception as e:
@@ -313,7 +337,6 @@ class EcranPrincipal(Ecran):
                 print("Veuillez choisir un nombre compris entre 0.5 et 3")
                 self.action_avancer()
                 return
-
 
     def on_key_press(self, event):
         note = self.notes_clavier.get(event.char, None)
