@@ -2,31 +2,44 @@
 
 **************************************************
 Documentation utilisateurs
+Si Python est installé sur votre PC, sautez les étapes 1 et 2
+Si Python n'est pas installé sur votre PC, suivre les étapes 1 et 2
 
 **************************************************
-Téléchargement de Python
+Téléchargement de Python (étape 1)
 
     Se rendre sur le site https://www.python.org/downloads/windows/
     Se rendre dans la partie "Stables Releases"
     Choisir la version la plus récente de Python (3.1X.X)
-    Prendre l'installer correspondant à votre système d'exploitation (MAC/PC/Linux)
-    Télécharger l'installer et l'exécuter quand le téléchargement est fini
-    Suivre les étapes indiquées par l'installer
-    Se rendre ensuite sur le terminal de commande lié à votre système d'exploitation
-    Taper dans l'environnement la commande python
-    Vous devez obligatoirement avoir une version de Python qui s'affiche dans l'invite de commandes
+    Prendre l'installer correspondant à votre système d'exploitation (PC)
+    Télécharger l'installer
+    Exécuter l'installer
+    Suivre les étapes de téléchargement indiquées
+    Taper le raccourci (Windows + R) sur PC
+    Rentrer ensuite le texte "cmd"
+    Exécuter
+    Appartition d'un terminal de commandes
+    Rentrer le mot python
+    Affichage d'une version de Python
 
 **************************************************
-Récupération du dossier contenant l'application
+Récupération du dossier contenant l'application (étape 2)
 
     Se rendre sur la page web suivante : https://github.com/CharlesGAUTHIER1999/projetmethagiles
     Se rendre dans la partie verte appelée "CODE"
     Récupérer le dossier projetmethagiles en le téléchargeant (format zip)
     Extraire les fichiers du dossier projetmethagiles sur votre bureau
-    Exécuter le fichier main.py (application générale)
+    
 
 **************************************************
+
+
+
+
+
+
 Fonctionnement général de l'application
+Exécuter le fichier main.py (application générale)
 
     But : jouer de la musique selon votre instrument préféré (le piano)
     Vous allez pouvoir jouer du piano via un piano virtuel ou importer un fichier qui jouera une séquence aléatoire.
