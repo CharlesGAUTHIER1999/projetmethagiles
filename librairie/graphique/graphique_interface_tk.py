@@ -100,6 +100,30 @@ class GraphiqueInterfaceTk(GraphiqueInterface):
         button = tk.Button(frame, width=width, height=height, text=label, cursor="hand2", image=image, command=fonction,
                            bg=bg, activebackground=activebackground, font=font)
         return button
+    
+    def creer_radiobutton(self, frame, variable: str, value: str, label: str, bg: str = None, font: str = None,
+                            width: int = None, height: int = None, command=None):
+        """
+        Création d'un bouton radio.
+
+        ----------------------------------------------------------
+
+        Args:
+            frame : le frame où sera le bouton radio
+            variable (str) : la variable du bouton radio
+            value (str) : la valeur du bouton radio
+            label (str) : le label du bouton radio
+            bg (str) : la couleur de l'arrière-plan du bouton radio
+            font : le font du label
+            width (int) : la largeur du bouton radio
+            height (int) : la hauteur du bouton radio
+
+        Return:
+            button : Retourne le bouton radio créé.
+        """
+
+        button = tk.Radiobutton(frame, variable=variable, value=value, text=label, bg=bg, font=font, width=width, height=height, command=command)
+        return button
 
     def creer_progress_bar(self, frame, orient: str = None, length: str = None, mode: str = None):
         """

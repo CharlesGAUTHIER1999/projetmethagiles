@@ -123,6 +123,8 @@ class MusicPlayer:
         notes_sequence = []
         duration_sequence = []
 
+        print("tempo", tempo)
+
         with open(filename, "r") as f:
             for line in f:
                 note = line.split()[0]
@@ -150,8 +152,8 @@ if __name__ == "__main__":
     # mp.play_sequence("pirate.txt", 1.5)
     # mp.generate_random_sequence(25, "test.txt", 60)
     # mp.generate_random_sequence(25, "test.txt", 90)
-    mp.generate_random_sequence(25, "test.txt", 120)
+    # mp.generate_random_sequence(25, "test.txt", 120)
     # mp.generate_random_sequence(25, "test.txt", "Aleatoire")
-    with open("test.txt", "a") as f:
-        f.write("0 0.5\n")
-    mp.play_sequence("test.txt", 1)
+    # with open("test.txt", "a") as f:
+    #     f.write("0 0.5\n")
+    # mp.play_sequence("test.txt", 1)
