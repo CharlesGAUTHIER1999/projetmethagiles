@@ -1,6 +1,5 @@
 from librairie.graphique.graphique_interface import GraphiqueInterface
 from ecran.ecran import Ecran
-from ecran.dialog import Dialog
 from element.clavier import Clavier
 from ecran.getsionnaire_etat_ecran import GestionnaireEtatEcran
 import threading
@@ -260,7 +259,7 @@ class EcranPrincipal(Ecran):
 
         # Générer une séquence aléatoire de notes et jouer la séquence
         print(f"Lecture de la séquence aléatoire avec un tempo de : {nb_de_notes}")
-        mp.generate_random_sequence(self, nb_de_notes, "test.txt", 1)
+        mp.generate_random_sequence(self, nb_de_notes * 2, "test.txt", 1)
         self.play_sequence("test.txt", 1)
 
     def load_music_file(self, file_path):
